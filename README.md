@@ -1,3 +1,3 @@
 # GDC2.0
 GDC App Powered By Java
-Hello GDC
+Hello GDC 2.0
