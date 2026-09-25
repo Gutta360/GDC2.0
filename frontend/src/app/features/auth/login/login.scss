@@ -1,0 +1,146 @@
+:host {
+  display: block;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0b1f33 0%,
+      #123b5d 50%,
+      #0b1f33 100%
+    );
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+
+  background: #ffffff;
+  border-radius: 18px;
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 32px;
+
+  h1 {
+    margin: 0;
+    font-size: 42px;
+    font-weight: 700;
+    color: #123b5d;
+    letter-spacing: 2px;
+  }
+
+  p {
+    margin: 8px 0 0;
+    font-size: 14px;
+    color: #667085;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #344054;
+  }
+
+  input {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 12px 14px;
+
+    font-size: 15px;
+    color: #101828;
+
+    background: #ffffff;
+
+    border: 1px solid #d0d5dd;
+    border-radius: 10px;
+
+    outline: none;
+
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+
+    &:focus {
+      border-color: #246bfd;
+      box-shadow: 0 0 0 3px rgba(36, 107, 253, 0.12);
+    }
+  }
+}
+
+.error-message {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+
+  font-size: 14px;
+  color: #b42318;
+
+  background: #fef3f2;
+  border: 1px solid #fecdca;
+  border-radius: 8px;
+}
+
+.login-button {
+  width: 100%;
+  padding: 13px 16px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #123b5d;
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+
+  &:hover {
+    background: #0d2f4b;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+@media (max-width: 480px) {
+  .login-page {
+    padding: 16px;
+  }
+
+  .login-card {
+    padding: 28px 22px;
+    border-radius: 14px;
+  }
+
+  .login-header {
+    h1 {
+      font-size: 36px;
+    }
+  }
+}

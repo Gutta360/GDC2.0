@@ -1,0 +1,205 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.app-shell {
+  min-height: 100vh;
+  background: #f7f7f7;
+}
+
+/* =========================
+   Main GDC Header
+   ========================= */
+
+.main-header {
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+
+  padding: 0 24px;
+
+  background: #000000;
+  color: #ffffff;
+}
+
+/* =========================
+   GDC Branding
+   ========================= */
+
+.brand {
+  flex-shrink: 0;
+
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* =========================
+   Main Navigation
+   ========================= */
+
+.main-navigation {
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  margin-left: 24px;
+}
+
+.nav-item {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 22px 12px;
+
+  color: #ffffff;
+  text-decoration: none;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  opacity: 0.88;
+
+  transition:
+    opacity 0.2s ease,
+    background-color 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &.active {
+    opacity: 1;
+  }
+
+  &.active::after {
+    content: '';
+
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 8px;
+
+    height: 2px;
+
+    background: #ffffff;
+    border-radius: 2px;
+  }
+}
+
+/* =========================
+   Home
+   ========================= */
+
+.home-link {
+  font-size: 24px;
+}
+
+.home-icon {
+  line-height: 1;
+}
+
+/* =========================
+   Logout
+   ========================= */
+
+.logout-button {
+  flex-shrink: 0;
+
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 20px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: transparent;
+  color: #ffffff;
+
+  font-size: 25px;
+
+  cursor: pointer;
+
+  opacity: 0.9;
+
+  transition:
+    opacity 0.2s ease,
+    background-color 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+    background: #1c1c1c;
+  }
+}
+
+/* =========================
+   Routed Application Area
+   ========================= */
+
+.application-content {
+  min-height: calc(100vh - 68px);
+
+  padding: 32px;
+
+  background: #f7f7f7;
+}
+
+/* =========================
+   Tablet
+   ========================= */
+
+@media (max-width: 900px) {
+
+  .main-header {
+    padding: 0 16px;
+  }
+
+  .main-navigation {
+    margin-left: 12px;
+    gap: 8px;
+  }
+
+  .nav-item {
+    padding-left: 8px;
+    padding-right: 8px;
+
+    font-size: 14px;
+  }
+
+  .application-content {
+    padding: 24px;
+  }
+}
+
+/* =========================
+   Mobile
+   ========================= */
+
+@media (max-width: 700px) {
+
+  .main-header {
+    overflow-x: auto;
+  }
+
+  .main-navigation {
+    justify-content: flex-start;
+    min-width: max-content;
+  }
+
+  .application-content {
+    padding: 16px;
+  }
+}

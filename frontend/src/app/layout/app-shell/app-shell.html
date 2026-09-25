@@ -1,0 +1,76 @@
+<div class="app-shell">
+
+  <header class="main-header">
+
+    <div class="brand">
+      GDC
+    </div>
+
+    <nav class="main-navigation">
+
+      <a
+        routerLink="/home"
+        routerLinkActive="active"
+        class="nav-item home-link"
+        aria-label="Home"
+      >
+        <span class="home-icon">⌂</span>
+      </a>
+
+      <a
+        routerLink="/patients"
+        routerLinkActive="active"
+        class="nav-item"
+      >
+        Patient
+      </a>
+
+      <a
+        routerLink="/appointments"
+        routerLinkActive="active"
+        class="nav-item"
+      >
+        Appointment
+      </a>
+
+      <a
+        routerLink="/treatments"
+        routerLinkActive="active"
+        class="nav-item"
+      >
+        Treatment
+      </a>
+
+      <a
+        routerLink="/payments"
+        routerLinkActive="active"
+        class="nav-item"
+      >
+        Payment
+      </a>
+
+      <a
+        routerLink="/pharmacy"
+        routerLinkActive="active"
+        class="nav-item"
+      >
+        Pharmacy
+      </a>
+
+    </nav>
+
+    <button
+      type="button"
+      class="logout-button"
+      aria-label="Logout"
+    >
+      ⏻
+    </button>
+
+  </header>
+
+  <main class="application-content">
+    <router-outlet />
+  </main>
+
+</div>
