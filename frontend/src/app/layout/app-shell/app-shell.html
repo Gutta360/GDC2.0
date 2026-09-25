@@ -8,6 +8,7 @@
 
     <nav class="main-navigation">
 
+      <!-- Home -->
       <a
         routerLink="/home"
         routerLinkActive="active"
@@ -17,14 +18,42 @@
         <span class="home-icon">⌂</span>
       </a>
 
-      <a
-        routerLink="/patients"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-        Patient
-      </a>
 
+      <!-- Patient Dropdown -->
+      <div class="nav-dropdown">
+
+        <a
+          routerLink="/patients"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          Patient
+        </a>
+
+        <div class="dropdown-menu">
+
+          <a
+            routerLink="/patients/registration"
+            routerLinkActive="active"
+            class="dropdown-item"
+          >
+            Registration
+          </a>
+
+          <a
+            routerLink="/patients/details"
+            routerLinkActive="active"
+            class="dropdown-item"
+          >
+            Patient Details
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- Appointment -->
       <a
         routerLink="/appointments"
         routerLinkActive="active"
@@ -33,6 +62,8 @@
         Appointment
       </a>
 
+
+      <!-- Treatment -->
       <a
         routerLink="/treatments"
         routerLinkActive="active"
@@ -41,6 +72,8 @@
         Treatment
       </a>
 
+
+      <!-- Payment -->
       <a
         routerLink="/payments"
         routerLinkActive="active"
@@ -49,6 +82,8 @@
         Payment
       </a>
 
+
+      <!-- Pharmacy -->
       <a
         routerLink="/pharmacy"
         routerLinkActive="active"
@@ -59,6 +94,8 @@
 
     </nav>
 
+
+    <!-- Logout -->
     <button
       type="button"
       class="logout-button"
@@ -69,6 +106,8 @@
 
   </header>
 
+
+  <!-- Routed Page Content -->
   <main class="application-content">
     <router-outlet />
   </main>

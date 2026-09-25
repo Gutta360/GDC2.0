@@ -8,12 +8,14 @@
   background: #f7f7f7;
 }
 
+
 /* =========================
    Main GDC Header
    ========================= */
 
 .main-header {
   min-height: 68px;
+
   display: flex;
   align-items: center;
 
@@ -21,7 +23,11 @@
 
   background: #000000;
   color: #ffffff;
+
+  position: relative;
+  z-index: 1000;
 }
+
 
 /* =========================
    GDC Branding
@@ -35,6 +41,7 @@
   letter-spacing: 0.5px;
 }
 
+
 /* =========================
    Main Navigation
    ========================= */
@@ -43,11 +50,12 @@
   flex: 1;
 
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-around;
 
   margin-left: 24px;
 }
+
 
 .nav-item {
   position: relative;
@@ -84,6 +92,7 @@
     content: '';
 
     position: absolute;
+
     left: 12px;
     right: 12px;
     bottom: 8px;
@@ -94,6 +103,7 @@
     border-radius: 2px;
   }
 }
+
 
 /* =========================
    Home
@@ -106,6 +116,101 @@
 .home-icon {
   line-height: 1;
 }
+
+
+/* =========================
+   Patient Dropdown Container
+   ========================= */
+
+.nav-dropdown {
+  position: relative;
+
+  display: flex;
+  align-items: stretch;
+}
+
+
+/* =========================
+   Patient Dropdown Menu
+   ========================= */
+
+.dropdown-menu {
+  position: absolute;
+
+  top: 100%;
+
+  /*
+   * Patient text begins 12px inside its nav-item.
+   * Dropdown items have 20px left padding.
+   *
+   * 12px - 20px = -8px
+   *
+   * This keeps the submenu text vertically aligned
+   * with the "Patient" text above.
+   */
+  left: -8px;
+
+  min-width: 210px;
+
+  display: none;
+  flex-direction: column;
+
+  background: #000000;
+
+  border: 1px solid #333333;
+  border-top: none;
+
+  border-radius: 0 0 22px 22px;
+
+  overflow: hidden;
+
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+
+  z-index: 2000;
+}
+
+
+/* Show Patient menu on hover */
+
+.nav-dropdown:hover .dropdown-menu {
+  display: flex;
+}
+
+
+/* =========================
+   Dropdown Items
+   ========================= */
+
+.dropdown-item {
+  display: block;
+
+  padding: 20px 20px;
+
+  color: #ffffff;
+  text-decoration: none;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  opacity: 0.9;
+
+  transition:
+    opacity 0.2s ease,
+    background-color 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+    background: #1c1c1c;
+  }
+
+  &.active {
+    opacity: 1;
+    background: #181818;
+  }
+}
+
 
 /* =========================
    Logout
@@ -145,6 +250,7 @@
   }
 }
 
+
 /* =========================
    Routed Application Area
    ========================= */
@@ -156,6 +262,7 @@
 
   background: #f7f7f7;
 }
+
 
 /* =========================
    Tablet
@@ -179,10 +286,20 @@
     font-size: 14px;
   }
 
+  .dropdown-menu {
+    min-width: 190px;
+  }
+
+  .dropdown-item {
+    font-size: 14px;
+    padding: 18px 20px;
+  }
+
   .application-content {
     padding: 24px;
   }
 }
+
 
 /* =========================
    Mobile
