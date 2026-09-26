@@ -1,0 +1,14 @@
+<section class="registration-page">
+
+  <div class="page-header">
+    <h1>Register Patient</h1>
+  </div>
+
+  <app-patient-form
+    mode="create"
+    [loading]="loading"
+    (formSubmit)="onPatientCreate($event)"
+  >
+  </app-patient-form>
+
+</section>

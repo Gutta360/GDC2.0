@@ -4,10 +4,10 @@ import { Login } from './features/auth/login/login';
 
 import { Home } from './features/home/home';
 
-import { Register } from './features/patients/register/register';
-
 import { AppShell } from './layout/app-shell/app-shell';
-
+import { PatientRegistration } from './features/patients/registration/patient-registration/patient-registration';
+import { PatientDetails } from './features/patients/details/patient-details/patient-details';
+import { PatientEdit } from './features/patients/edit/patient-edit/patient-edit';
 
 export const routes: Routes = [
 
@@ -46,12 +46,17 @@ export const routes: Routes = [
       },
 
       {
-
-        path: 'patients/registration',
-
-        component: Register
-
-      }
+  path: 'patients/register',
+  component: PatientRegistration
+},
+{
+  path: 'patients/details',
+  component: PatientDetails
+},
+{
+  path: 'patients/:patientId/edit',
+  component: PatientEdit
+}
 
     ]
 
