@@ -112,13 +112,13 @@
        Patient Details
        ========================= -->
 
-  @if (loadingDetails) {
+  @if (loadingDetails && !patient) {
 
-    <div class="loading-state">
-      Loading patient details...
-    </div>
+  <div class="loading-state">
+    Loading patient details...
+  </div>
 
-  } @else if (patient) {
+} @else if (patient) {
 
     <section class="patient-information">
 

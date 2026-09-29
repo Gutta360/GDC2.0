@@ -1,5 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PatientService } from '../../services/patient.service';
@@ -37,8 +41,9 @@ export class PatientDetails implements OnInit {
 
   constructor(
     private patientService: PatientService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
     this.loadPatients();
@@ -187,7 +192,6 @@ export class PatientDetails implements OnInit {
   ): void {
 
     this.loadingDetails = true;
-    this.patient = null;
 
     this.patientService
       .getPatient(patientId)
@@ -197,6 +201,8 @@ export class PatientDetails implements OnInit {
 
           this.patient = patient;
           this.loadingDetails = false;
+
+          this.cdr.detectChanges();
         },
 
         error: error => {
@@ -206,8 +212,9 @@ export class PatientDetails implements OnInit {
             error
           );
 
-          this.patient = null;
           this.loadingDetails = false;
+
+          this.cdr.detectChanges();
         }
 
       });
