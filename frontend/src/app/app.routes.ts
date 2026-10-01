@@ -8,6 +8,7 @@ import { AppShell } from './layout/app-shell/app-shell';
 import { PatientRegistration } from './features/patients/registration/patient-registration/patient-registration';
 import { PatientDetails } from './features/patients/details/patient-details/patient-details';
 import { PatientEdit } from './features/patients/edit/patient-edit/patient-edit';
+import { AppointmentCalendar } from './features/appointments/calendar/appointment-calendar';
 
 export const routes: Routes = [
 
@@ -46,17 +47,46 @@ export const routes: Routes = [
       },
 
       {
-  path: 'patients/registration',
-  component: PatientRegistration
-},
-{
-  path: 'patients/details',
-  component: PatientDetails
-},
-{
-  path: 'patients/:patientId/edit',
-  component: PatientEdit
-}
+
+        path: 'patients/registration',
+
+        component: PatientRegistration
+
+      },
+
+      {
+
+        path: 'patients/details',
+
+        component: PatientDetails
+
+      },
+
+      {
+
+        path: 'patients/:patientId/edit',
+
+        component: PatientEdit
+
+      },
+
+      {
+
+        path: 'appointments',
+
+        redirectTo: 'appointments/calendar',
+
+        pathMatch: 'full'
+
+      },
+
+      {
+
+        path: 'appointments/calendar',
+
+        component: AppointmentCalendar
+
+      }
 
     ]
 

@@ -10,7 +10,8 @@ import {
 
 import {
   PatientRequest,
-  PatientResponse
+  PatientResponse,
+  PatientSummary
 } from '../models/patient.model';
 
 
@@ -48,6 +49,21 @@ export class PatientService {
 
     return this.http.get<PatientResponse[]>(
       this.apiUrl
+    );
+  }
+
+
+  searchActivePatients(
+    query: string
+  ): Observable<PatientSummary[]> {
+
+    return this.http.get<PatientSummary[]>(
+      `${this.apiUrl}/search`,
+      {
+        params: {
+          query
+        }
+      }
     );
   }
 

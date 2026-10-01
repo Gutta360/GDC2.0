@@ -19,6 +19,26 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     List<Patient> findAllByActiveTrue();
 
+    @Query(
+            value = """
+            SELECT *
+            FROM patients p
+            WHERE p.is_active = true
+              AND (
+                  LOWER(p.patient_id) LIKE LOWER(CONCAT('%', :query, '%'))
+                  OR LOWER(p.first_name) LIKE LOWER(CONCAT('%', :query, '%'))
+                  OR LOWER(COALESCE(p.last_name, '')) LIKE LOWER(CONCAT('%', :query, '%'))
+                  OR p.mobile LIKE CONCAT('%', :query, '%')
+              )
+            ORDER BY p.first_name ASC, p.last_name ASC, p.patient_id ASC
+            LIMIT 20
+            """,
+            nativeQuery = true
+    )
+    List<Patient> searchActivePatients(
+            @Param("query") String query
+    );
+
     @Query("""
             SELECT COUNT(p) > 0
             FROM Patient p

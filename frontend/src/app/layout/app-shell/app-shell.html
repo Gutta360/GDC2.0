@@ -67,14 +67,30 @@
       </div>
 
 
-      <!-- Appointment -->
-      <a
-        routerLink="/appointments"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-        Appointment
-      </a>
+      <!-- Appointment Dropdown -->
+      <div class="nav-dropdown">
+
+        <a
+          routerLink="/appointments/calendar"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          Appointment
+        </a>
+
+        <div class="dropdown-menu">
+
+          <a
+            routerLink="/appointments/calendar"
+            routerLinkActive="active"
+            class="dropdown-item"
+          >
+            Calendar
+          </a>
+
+        </div>
+
+      </div>
 
 
       <!-- Treatment -->

@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gdc.backend.patient.dto.PatientCreateRequest;
 import com.gdc.backend.patient.dto.PatientResponse;
+import com.gdc.backend.patient.dto.PatientSummaryResponse;
 import com.gdc.backend.patient.dto.PatientUpdateRequest;
 import com.gdc.backend.patient.service.PatientService;
 
@@ -62,6 +64,17 @@ public class PatientController {
 
         List<PatientResponse> response =
                 patientService.getAllPatients();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<PatientSummaryResponse>> searchPatients(
+            @RequestParam String query
+    ) {
+
+        List<PatientSummaryResponse> response =
+                patientService.searchActivePatients(query);
 
         return ResponseEntity.ok(response);
     }

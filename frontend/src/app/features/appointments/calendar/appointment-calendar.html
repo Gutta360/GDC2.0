@@ -1,0 +1,361 @@
+<section class="appointment-page">
+
+  <header class="calendar-toolbar">
+    <button
+      type="button"
+      class="icon-button"
+      aria-label="Previous month"
+      (click)="previousMonth()"
+    >
+      &lsaquo;
+    </button>
+
+    <h1>{{ monthTitle }}</h1>
+
+    <button
+      type="button"
+      class="icon-button"
+      aria-label="Next month"
+      (click)="nextMonth()"
+    >
+      &rsaquo;
+    </button>
+  </header>
+
+  @if (errorMessage) {
+    <p class="message error">{{ errorMessage }}</p>
+  }
+
+  @if (successMessage) {
+    <p class="message success">{{ successMessage }}</p>
+  }
+
+  <div class="weekday-row" aria-hidden="true">
+    @for (weekday of weekdays; track weekday) {
+      <span>{{ weekday }}</span>
+    }
+  </div>
+
+  <div
+    class="calendar-grid"
+    [class.loading]="loadingCalendar"
+  >
+    @for (cell of calendarCells; track trackCell($index, cell)) {
+      <button
+        type="button"
+        class="calendar-cell"
+        [class.outside-month]="!cell.inFocusedMonth"
+        [class.today]="cell.isToday"
+        (click)="openDay(cell)"
+        [attr.aria-label]="cell.isoDate + ' appointments'"
+      >
+        <span class="day-number">{{ cell.day }}</span>
+
+        <span class="badges">
+          @if ((cell.counts?.newAppointments ?? 0) > 0) {
+            <span class="badge new">
+              {{ cell.counts?.newAppointments }} New
+            </span>
+          }
+
+          @if ((cell.counts?.followUpAppointments ?? 0) > 0) {
+            <span class="badge follow">
+              {{ cell.counts?.followUpAppointments }} Follow-up
+            </span>
+          }
+
+          @if ((cell.counts?.doctorBusySlots ?? 0) > 0) {
+            <span class="badge busy">
+              {{ cell.counts?.doctorBusySlots }} Busy
+            </span>
+          }
+        </span>
+      </button>
+    }
+  </div>
+
+  <footer class="legend">
+    <span><i class="dot new"></i> New Appointment</span>
+    <span><i class="dot follow"></i> Follow-up</span>
+    <span><i class="dot busy"></i> Doctor Busy</span>
+  </footer>
+
+</section>
+
+@if (selectedDate) {
+  <div
+    class="dialog-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="day-title"
+  >
+    <section class="day-dialog">
+
+      <header class="dialog-header">
+        <h2 id="day-title">{{ selectedDateTitle }}</h2>
+
+        <button
+          type="button"
+          class="close-button"
+          aria-label="Close"
+          (click)="closeDay()"
+        >
+          &times;
+        </button>
+      </header>
+
+      <div class="dialog-body">
+
+        @if (!createOpen && !busyOpen) {
+          <section class="day-section">
+            <h3>Appointments</h3>
+
+            @if (loadingDay) {
+              <p class="muted">Loading appointments...</p>
+            } @else if (!dayDetails?.appointments?.length) {
+              <p class="muted">No appointments scheduled.</p>
+            } @else {
+              <div class="day-list">
+                @for (appointment of dayDetails?.appointments; track appointment.appointmentId) {
+                  <article
+                    class="day-item"
+                    [class.follow]="appointment.appointmentType === 'FOLLOW_UP'"
+                  >
+                    <div>
+                      <strong>{{ formatTime(appointment.appointmentTime) }}</strong>
+                      <span>{{ appointmentTypeLabel(appointment.appointmentType) }}</span>
+                    </div>
+
+                    <p>
+                      {{ appointment.patientName }}
+                      <small>{{ appointment.patientId }}</small>
+                    </p>
+
+                    <button
+                      type="button"
+                      class="link-button"
+                      (click)="openWhatsAppReminder(appointment)"
+                    >
+                      WhatsApp reminder
+                    </button>
+                  </article>
+                }
+              </div>
+            }
+          </section>
+
+          <hr />
+
+          <section class="day-section">
+            <h3>Doctor busy hours</h3>
+
+            @if (!dayDetails?.doctorBusySlots?.length) {
+              <p class="muted">No busy hours logged.</p>
+            } @else {
+              <div class="day-list">
+                @for (busy of dayDetails?.doctorBusySlots; track busy.id) {
+                  <article class="day-item busy">
+                    <div>
+                      <strong>{{ formatTime(busy.time) }}</strong>
+                      <span>Doctor Busy</span>
+                    </div>
+
+                    <p>{{ busy.notes || 'No notes supplied.' }}</p>
+                  </article>
+                }
+              </div>
+            }
+          </section>
+        }
+
+        @if (createOpen) {
+          <form
+            class="appointment-form"
+            [formGroup]="appointmentForm"
+            (ngSubmit)="submitAppointment()"
+          >
+            <h3>Create Appointment - {{ compactSelectedDateTitle }}</h3>
+
+            <div class="patient-search">
+              <label for="patientSearch">Patient *</label>
+              <input
+                id="patientSearch"
+                type="search"
+                placeholder="Search by Patient ID or name"
+                [(ngModel)]="patientSearch"
+                [ngModelOptions]="{ standalone: true }"
+                (input)="searchPatients()"
+              />
+              <input type="hidden" formControlName="patientId" />
+
+              @if (patients.length) {
+                <div class="search-results">
+                  @for (patient of patients; track patient.patientId) {
+                    <button
+                      type="button"
+                      (click)="selectPatient(patient)"
+                    >
+                      <strong>{{ patient.patientId }}</strong>
+                      {{ patient.fullName }}
+                      <small>{{ patient.mobile }}</small>
+                    </button>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="time-type-row">
+              <label>
+                Time *
+                <select formControlName="appointmentTime">
+                  <option value="">Choose Time</option>
+                  @for (slot of availability; track slot.time) {
+                    <option
+                      [value]="slot.time"
+                      [disabled]="!slot.available"
+                    >
+                      {{ formatTime(slot.time) }}
+                      {{ !slot.available ? ' - unavailable' : '' }}
+                    </option>
+                  }
+                </select>
+              </label>
+
+              <div class="radio-pair" role="radiogroup" aria-label="Appointment type">
+                <label>
+                  <input type="radio" formControlName="appointmentType" value="NEW" />
+                  New
+                </label>
+                <label>
+                  <input type="radio" formControlName="appointmentType" value="FOLLOW_UP" />
+                  Follow Up
+                </label>
+              </div>
+            </div>
+
+            <h4>Section 1 - Vitals</h4>
+            <div class="form-grid">
+              <input type="number" formControlName="systolicBp" placeholder="Systolic" />
+              <input type="number" formControlName="diastolicBp" placeholder="Diastolic" />
+              <label class="range-label">
+                Heart Rate - {{ appointmentForm.value.heartRate || 72 }}
+                <input type="range" min="30" max="220" formControlName="heartRate" />
+              </label>
+              <label class="range-label">
+                Breathing Rate - {{ appointmentForm.value.breathingRate || 16 }}
+                <input type="range" min="5" max="80" formControlName="breathingRate" />
+              </label>
+              <input type="number" formControlName="heightCm" placeholder="Height (cm)" />
+              <input type="number" formControlName="weightKg" placeholder="Weight (kg)" />
+              <input type="number" formControlName="fbs" placeholder="FBS" />
+              <input type="number" formControlName="rbs" placeholder="RBS" />
+            </div>
+
+            <h4>Section 2 - Health Conditions</h4>
+            <div class="check-grid">
+              @for (condition of conditionFields; track condition[0]) {
+                <label>
+                  <input type="checkbox" [formControlName]="condition[0]" />
+                  {{ condition[1] }}
+                </label>
+              }
+            </div>
+
+            <h4>Section 3 - Allergies</h4>
+            <div class="check-grid allergy-grid">
+              <label><input type="checkbox" formControlName="hasDrugAllergy" /> Drug Allergy</label>
+              <label><input type="checkbox" formControlName="hasFoodAllergy" /> Food Allergy</label>
+              <label><input type="checkbox" formControlName="hasLatexAllergy" /> Latex Allergy</label>
+            </div>
+            <input type="text" formControlName="otherAllergyNotes" placeholder="Other allergies" />
+
+            <h4>Section 4 - Past Surgical History</h4>
+            <textarea formControlName="pastSurgicalHistory" rows="3" placeholder="Surgical history"></textarea>
+
+            <h4>Section 6 - Dental History</h4>
+            <div class="check-grid">
+              @for (field of dentalFields; track field[0]) {
+                <label>
+                  <input type="checkbox" [formControlName]="field[0]" />
+                  {{ field[1] }}
+                </label>
+              }
+            </div>
+            <textarea formControlName="dentalComplicationNotes" rows="3" placeholder="Dental complications / notes"></textarea>
+
+            <h4>Section 9 - Patient Consent</h4>
+            <div class="check-grid consent-row">
+              <label><input type="checkbox" formControlName="consentGiven" /> Consent given</label>
+              <input type="text" formControlName="consentReference" placeholder="Signature/scanned reference" />
+            </div>
+
+            <textarea formControlName="notes" rows="3" placeholder="General appointment notes"></textarea>
+
+            <div class="dialog-actions">
+              <button type="button" class="secondary-button" (click)="closeCreate()">Cancel</button>
+              <button type="submit" class="primary-button" [disabled]="saving">Save</button>
+            </div>
+          </form>
+        }
+
+        @if (busyOpen) {
+          <form
+            class="busy-form"
+            [formGroup]="busyForm"
+            (ngSubmit)="submitDoctorBusy()"
+          >
+            <h3>Doctor Busy - {{ compactSelectedDateTitle }}</h3>
+
+            <label>
+              Time *
+              <select formControlName="time">
+                <option value="">Choose Time</option>
+                @for (slot of availability; track slot.time) {
+                  <option
+                    [value]="slot.time"
+                    [disabled]="!slot.available"
+                  >
+                    {{ formatTime(slot.time) }}
+                    {{ !slot.available ? ' - unavailable' : '' }}
+                  </option>
+                }
+              </select>
+            </label>
+
+            <label>
+              Notes
+              <textarea formControlName="notes" rows="4" placeholder="Reason or notes"></textarea>
+            </label>
+
+            <div class="dialog-actions">
+              <button type="button" class="secondary-button" (click)="closeBusy()">Cancel</button>
+              <button type="submit" class="primary-button" [disabled]="saving">Save</button>
+            </div>
+          </form>
+        }
+
+      </div>
+
+      @if (!createOpen && !busyOpen) {
+        <footer class="dialog-footer">
+          <button
+            type="button"
+            class="danger-outline-button"
+            (click)="openDoctorBusy()"
+          >
+            Doctor Busy
+          </button>
+
+          <button
+            type="button"
+            class="primary-button"
+            (click)="openCreateAppointment()"
+          >
+            New
+          </button>
+        </footer>
+      }
+
+    </section>
+  </div>
+}

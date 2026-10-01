@@ -1,0 +1,83 @@
+package com.gdc.backend.common.exception;
+
+import com.gdc.backend.appointment.exception.AppointmentNotFoundException;
+import com.gdc.backend.appointment.exception.DoctorBusyNotFoundException;
+import com.gdc.backend.appointment.exception.SchedulingConflictException;
+import com.gdc.backend.appointment.exception.SchedulingValidationException;
+import com.gdc.backend.patient.exception.DuplicatePatientException;
+import com.gdc.backend.patient.exception.PatientNotFoundException;
+import com.gdc.backend.patient.exception.PatientValidationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.time.Instant;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiErrorResponse> handleValidation(
+            MethodArgumentNotValidException exception
+    ) {
+
+        Map<String, String> fieldErrors = new LinkedHashMap<>();
+
+        for (FieldError fieldError : exception.getBindingResult().getFieldErrors()) {
+            fieldErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
+        }
+
+        return buildResponse(
+                HttpStatus.BAD_REQUEST,
+                "Validation failed",
+                fieldErrors
+        );
+    }
+
+    @ExceptionHandler({
+            PatientValidationException.class,
+            SchedulingValidationException.class
+    })
+    public ResponseEntity<ApiErrorResponse> handleBadRequest(RuntimeException exception) {
+        return buildResponse(HttpStatus.BAD_REQUEST, exception.getMessage(), Map.of());
+    }
+
+    @ExceptionHandler({
+            PatientNotFoundException.class,
+            AppointmentNotFoundException.class,
+            DoctorBusyNotFoundException.class
+    })
+    public ResponseEntity<ApiErrorResponse> handleNotFound(RuntimeException exception) {
+        return buildResponse(HttpStatus.NOT_FOUND, exception.getMessage(), Map.of());
+    }
+
+    @ExceptionHandler({
+            DuplicatePatientException.class,
+            SchedulingConflictException.class
+    })
+    public ResponseEntity<ApiErrorResponse> handleConflict(RuntimeException exception) {
+        return buildResponse(HttpStatus.CONFLICT, exception.getMessage(), Map.of());
+    }
+
+    private ResponseEntity<ApiErrorResponse> buildResponse(
+            HttpStatus status,
+            String message,
+            Map<String, String> fieldErrors
+    ) {
+
+        return ResponseEntity
+                .status(status)
+                .body(new ApiErrorResponse(
+                        Instant.now(),
+                        status.value(),
+                        status.getReasonPhrase(),
+                        message,
+                        fieldErrors
+                ));
+    }
+}

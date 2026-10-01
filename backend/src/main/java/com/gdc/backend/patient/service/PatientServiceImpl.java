@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gdc.backend.patient.dto.PatientCreateRequest;
 import com.gdc.backend.patient.dto.PatientResponse;
+import com.gdc.backend.patient.dto.PatientSummaryResponse;
 import com.gdc.backend.patient.dto.PatientUpdateRequest;
 import com.gdc.backend.patient.entity.Patient;
 import com.gdc.backend.patient.entity.ReferredBy;
@@ -73,6 +74,26 @@ public class PatientServiceImpl implements PatientService {
                 return patientRepository.findAllByActiveTrue()
                                 .stream()
                                 .map(patientMapper::toResponse)
+                                .toList();
+        }
+
+        @Override
+        @Transactional(readOnly = true)
+        public List<PatientSummaryResponse> searchActivePatients(String query) {
+
+                String normalizedQuery =
+                                query == null
+                                                ? ""
+                                                : query.trim();
+
+                if (normalizedQuery.length() < 2) {
+                        return List.of();
+                }
+
+                return patientRepository
+                                .searchActivePatients(normalizedQuery)
+                                .stream()
+                                .map(patientMapper::toSummaryResponse)
                                 .toList();
         }
 

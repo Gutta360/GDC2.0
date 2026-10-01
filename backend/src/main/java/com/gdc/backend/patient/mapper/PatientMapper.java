@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.gdc.backend.patient.dto.PatientCreateRequest;
 import com.gdc.backend.patient.dto.PatientResponse;
+import com.gdc.backend.patient.dto.PatientSummaryResponse;
 import com.gdc.backend.patient.dto.PatientUpdateRequest;
 import com.gdc.backend.patient.entity.Patient;
 
@@ -85,6 +86,20 @@ public class PatientMapper {
                 patient.getCreatedAt(),
                 patient.getUpdatedAt(),
                 patient.getVersion()
+        );
+    }
+
+    public PatientSummaryResponse toSummaryResponse(Patient patient) {
+
+        return new PatientSummaryResponse(
+                patient.getPatientId(),
+                patient.getFirstName(),
+                patient.getLastName(),
+                buildFullName(
+                        patient.getFirstName(),
+                        patient.getLastName()
+                ),
+                patient.getMobile()
         );
     }
 

@@ -96,4 +96,6 @@ export interface PatientSummary {
   lastName: string | null;
 
   fullName: string;
+
+  mobile?: string | null;
 }
