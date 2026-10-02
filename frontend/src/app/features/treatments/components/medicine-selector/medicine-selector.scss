@@ -1,0 +1,157 @@
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background: rgba(0, 0, 0, 0.52);
+}
+
+.medicine-dialog {
+  width: min(1080px, 100%);
+  max-height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.dialog-header {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: #000000;
+  color: #ffffff;
+
+  h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 800;
+  }
+
+  button {
+    border: 0;
+    background: transparent;
+    color: #ffffff;
+    font-size: 36px;
+    line-height: 1;
+    cursor: pointer;
+  }
+}
+
+.dialog-body {
+  overflow: auto;
+  padding: 20px;
+}
+
+.search-input {
+  width: 100%;
+  min-height: 54px;
+  box-sizing: border-box;
+  padding: 0 16px;
+  border: 1px solid #7b7f89;
+  border-radius: 16px;
+  background: #f8fafc;
+  font: inherit;
+}
+
+h3 {
+  margin: 20px 0 10px;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.medicine-table,
+.cart-list {
+  border: 1px solid #eef0f4;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table-row,
+.cart-row {
+  display: grid;
+  grid-template-columns: 70px 1fr 150px 90px;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 0 14px;
+  border-bottom: 1px solid #eef0f4;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.table-row.header {
+  background: #f8fafc;
+}
+
+.table-row button,
+.remove-button {
+  border: 0;
+  background: transparent;
+  color: #6941c6;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.quantity-control {
+  display: inline-grid;
+  grid-template-columns: 36px 36px 36px;
+  align-items: center;
+  justify-items: center;
+
+  button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #d9dee7;
+    border-radius: 50%;
+    background: #ffffff;
+    font: inherit;
+    cursor: pointer;
+  }
+}
+
+.empty-state,
+.validation-message {
+  margin: 12px 0 0;
+  color: #667085;
+}
+
+.validation-message {
+  color: #b42318;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 20px 20px;
+}
+
+.submit-button {
+  min-width: 96px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: #000000;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .table-row,
+  .cart-row {
+    grid-template-columns: 48px 1fr;
+  }
+}

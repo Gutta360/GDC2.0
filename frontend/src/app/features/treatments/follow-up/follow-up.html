@@ -1,0 +1,161 @@
+<section class="follow-up-page">
+  <h1>Follow Up</h1>
+
+  <form
+    class="follow-up-form"
+    [formGroup]="form"
+    (ngSubmit)="save()"
+  >
+    <div class="patient-row">
+      <app-treatment-patient-selector
+        (patientChange)="onPatientChange($event)"
+      />
+
+      <input
+        type="date"
+        formControlName="followUpDate"
+      />
+    </div>
+
+    <app-patient-health-snapshot
+      [snapshot]="healthSnapshot"
+      [loading]="loadingHealth"
+    />
+
+    @if (loadingContext) {
+      <p class="loading-state">Loading previous treatment history...</p>
+    } @else if (context?.latestTreatment) {
+      <section class="history-card">
+        <header>
+          <strong>Previous Treatment</strong>
+          <span>{{ context?.latestTreatment?.treatmentDate | date:'EEEE dd-MMM-yyyy h:mm a' }}</span>
+        </header>
+        <div class="history-body">
+          @if (context?.latestTreatment?.problems?.length) {
+            @for (problem of context?.latestTreatment?.problems; track $index) {
+              <p>
+                <strong>{{ problemTypeLabels[problem.problemType] }}</strong>
+                <span>Teeth: {{ problem.teeth.join(', ') }}</span>
+              </p>
+            }
+          } @else {
+            <p>No previous problems recorded.</p>
+          }
+
+          @if (context?.latestTreatment?.doctorNotes) {
+            <p>{{ context?.latestTreatment?.doctorNotes }}</p>
+          }
+
+          @if (context?.latestTreatment?.prescribedMedicines?.length) {
+            <p>
+              Medicines:
+              @for (medicine of context?.latestTreatment?.prescribedMedicines; track medicine.medicineId) {
+                <span>{{ medicine.medicineName }} × {{ medicine.quantity }}</span>
+              }
+            </p>
+          }
+        </div>
+      </section>
+    }
+
+    @if (context?.previousFollowUps?.length) {
+      <section class="history-card">
+        <header>
+          <strong>Previous Follow Ups</strong>
+          <span>{{ context?.previousFollowUps?.length }} record(s)</span>
+        </header>
+        <div class="history-body">
+          @for (followUp of context?.previousFollowUps; track followUp.followUpId) {
+            <article class="history-item">
+              <strong>{{ followUp.followUpDate | date:'dd-MMM-yyyy' }}</strong>
+              @if (followUp.doctorNotes) {
+                <span>{{ followUp.doctorNotes }}</span>
+              }
+            </article>
+          }
+        </div>
+      </section>
+    }
+
+    <section class="form-section">
+      <h2>Medicine Prescription</h2>
+      @if (medicines.length) {
+        <div class="summary-list">
+          @for (medicine of medicines; track medicine.medicineId) {
+            <span>{{ medicine.medicineName }} × {{ medicine.quantity }}</span>
+          }
+        </div>
+      } @else {
+        <p class="empty-state">No medicines prescribed</p>
+      }
+      <button type="button" class="pill-button" (click)="medicineOpen = true">
+        ＋ Add Medicines
+      </button>
+    </section>
+
+    <section class="form-section">
+      <h2>Scans</h2>
+      <app-scan-uploader
+        [scans]="scans"
+        (scansChange)="scans = $event"
+      />
+    </section>
+
+    <section class="form-section">
+      <h2>New Problems</h2>
+      <app-treatment-problem-list
+        [problems]="newProblems"
+        (editProblem)="editProblem($event)"
+        (removeProblem)="removeProblem($event)"
+      />
+      <button type="button" class="pill-button" (click)="addProblemOpen = true">
+        ＋ Add New Problem
+      </button>
+    </section>
+
+    <section class="form-section">
+      <label for="doctorNotes">Doctor Notes</label>
+      <textarea
+        id="doctorNotes"
+        formControlName="doctorNotes"
+        rows="6"
+        placeholder="Doctor notes"
+      ></textarea>
+    </section>
+
+    <footer class="form-footer">
+      <button
+        type="submit"
+        class="save-button"
+        [disabled]="saving"
+      >
+        {{ saving ? 'Saving...' : 'Save' }}
+      </button>
+    </footer>
+  </form>
+</section>
+
+<app-add-problem
+  [open]="addProblemOpen"
+  [initialProblem]="editingProblem"
+  (close)="addProblemOpen = false; editingProblem = null; editingProblemIndex = null"
+  (problemAdd)="addProblem($event)"
+/>
+
+<app-medicine-selector
+  [open]="medicineOpen"
+  [cart]="medicines"
+  (close)="medicineOpen = false"
+  (cartChange)="medicines = $event"
+/>
+
+@if (snackbarMessage) {
+  <div
+    class="notification-strip"
+    [class.success]="snackbarType === 'success'"
+    [class.error]="snackbarType === 'error'"
+    role="alert"
+  >
+    {{ snackbarMessage }}
+  </div>
+}

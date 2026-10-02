@@ -55,6 +55,15 @@ public class AppointmentController {
         );
     }
 
+    @GetMapping("/patients/{patientId}/latest")
+    public ResponseEntity<AppointmentResponse> getLatestForPatient(
+            @PathVariable String patientId
+    ) {
+        return ResponseEntity.ok(
+                appointmentService.getLatestForPatient(patientId)
+        );
+    }
+
     @GetMapping("/calendar")
     public ResponseEntity<List<AppointmentCalendarDayResponse>> getCalendar(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,

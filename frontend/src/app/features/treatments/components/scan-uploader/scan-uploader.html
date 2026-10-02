@@ -1,0 +1,29 @@
+@if (scans.length) {
+  <div class="scan-list">
+    @for (scan of scans; track scan.name + scan.size + $index) {
+      <article class="scan-item">
+        <span>{{ scan.name }}</span>
+        <small>{{ (scan.size / 1024 / 1024) | number:'1.1-1' }} MB</small>
+        <button type="button" (click)="remove($index)">
+          Remove
+        </button>
+      </article>
+    }
+  </div>
+} @else {
+  <p class="empty-state">No scans uploaded</p>
+}
+
+<label class="upload-button">
+  <span>＋ Add Scans</span>
+  <input
+    type="file"
+    accept="image/png,image/jpeg,image/webp"
+    multiple
+    (change)="onFilesSelected($event)"
+  />
+</label>
+
+@if (errorMessage) {
+  <p class="validation-message">{{ errorMessage }}</p>
+}

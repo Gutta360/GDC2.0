@@ -21,6 +21,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             Instant to
     );
 
+    @EntityGraph(attributePaths = "patient")
+    Optional<Appointment> findFirstByPatientPatientIdAndActiveTrueOrderByAppointmentDateTimeDescIdDesc(
+            String patientId
+    );
+
     @Query(value = "SELECT nextval('appointment_number_seq')", nativeQuery = true)
     Long getNextAppointmentNumber();
 

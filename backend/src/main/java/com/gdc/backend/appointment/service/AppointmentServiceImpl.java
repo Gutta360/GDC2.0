@@ -144,6 +144,25 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional(readOnly = true)
+    public AppointmentResponse getLatestForPatient(String patientId) {
+
+        String normalizedPatientId = normalizePatientId(patientId);
+
+        Appointment appointment = appointmentRepository
+                .findFirstByPatientPatientIdAndActiveTrueOrderByAppointmentDateTimeDescIdDesc(
+                        normalizedPatientId
+                )
+                .orElseThrow(
+                        () -> new AppointmentNotFoundException(
+                                normalizedPatientId
+                        )
+                );
+
+        return appointmentMapper.toResponse(appointment);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<AppointmentCalendarDayResponse> getCalendar(
             LocalDate from,
             LocalDate to

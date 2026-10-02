@@ -1,0 +1,54 @@
+.loading-state {
+  margin: 12px 0;
+  color: #667085;
+}
+
+.snapshot-card {
+  margin: 16px 0;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+header {
+  display: grid;
+  gap: 2px;
+  padding: 12px 14px;
+  background: #111827;
+  color: #ffffff;
+
+  span {
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 12px;
+  }
+}
+
+.snapshot-row {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 14px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #d1d5db;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  > strong {
+    color: #4b5563;
+  }
+
+  div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    color: #111827;
+  }
+}
+
+@media (max-width: 650px) {
+  .snapshot-row {
+    grid-template-columns: 1fr;
+  }
+}

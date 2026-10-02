@@ -1,0 +1,36 @@
+@if (problems.length) {
+  <div class="problem-list">
+    @for (problem of problems; track $index) {
+      <article class="problem-item">
+        <div>
+          <strong>{{ problemLabel(problem) }}</strong>
+          <span>Teeth: {{ problem.teeth.join(', ') }}</span>
+          @if (problem.notes) {
+            <p>{{ problem.notes }}</p>
+          }
+          @for (detail of details(problem); track detail) {
+            <small>{{ detail }}</small>
+          }
+        </div>
+
+        <div class="actions">
+          <button
+            type="button"
+            (click)="editProblem.emit($index)"
+          >
+            Edit
+          </button>
+          <button
+            type="button"
+            class="remove"
+            (click)="removeProblem.emit($index)"
+          >
+            Remove
+          </button>
+        </div>
+      </article>
+    }
+  </div>
+} @else {
+  <p class="empty-state">No problems added.</p>
+}

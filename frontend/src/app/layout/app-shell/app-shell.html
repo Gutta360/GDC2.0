@@ -93,14 +93,38 @@
       </div>
 
 
-      <!-- Treatment -->
-      <a
-        routerLink="/treatments"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-        Treatment
-      </a>
+      <!-- Treatment Dropdown -->
+      <div class="nav-dropdown">
+
+        <a
+          routerLink="/treatments"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          Treatment
+        </a>
+
+        <div class="dropdown-menu">
+
+          <a
+            routerLink="/treatments"
+            routerLinkActive="active"
+            class="dropdown-item"
+          >
+            Treatment
+          </a>
+
+          <a
+            routerLink="/treatments/follow-up"
+            routerLinkActive="active"
+            class="dropdown-item"
+          >
+            Follow Up
+          </a>
+
+        </div>
+
+      </div>
 
 
       <!-- Payment -->

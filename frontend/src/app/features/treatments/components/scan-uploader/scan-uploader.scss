@@ -1,0 +1,58 @@
+.scan-list {
+  display: grid;
+  gap: 8px;
+  margin: 8px 0 12px;
+}
+
+.scan-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid #d9dee7;
+  border-radius: 8px;
+  background: #ffffff;
+
+  small {
+    color: #667085;
+  }
+
+  button {
+    border: 0;
+    background: transparent;
+    color: #b42318;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+  }
+}
+
+.empty-state {
+  margin: 8px 0 12px;
+  color: #98a2b3;
+}
+
+.upload-button {
+  width: fit-content;
+  min-height: 43px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 24px;
+  border-radius: 999px;
+  background: #111827;
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+
+  input {
+    display: none;
+  }
+}
+
+.validation-message {
+  margin: 10px 0 0;
+  color: #b42318;
+  font-size: 13px;
+  font-weight: 700;
+}

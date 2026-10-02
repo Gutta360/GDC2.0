@@ -1,0 +1,76 @@
+@if (open) {
+  <div class="dialog-backdrop" role="dialog" aria-modal="true">
+    <section class="medicine-dialog">
+      <header class="dialog-header">
+        <h2>Add Medicines</h2>
+        <button type="button" aria-label="Close" (click)="done()">×</button>
+      </header>
+
+      <div class="dialog-body">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search medicine"
+          [(ngModel)]="search"
+          autocomplete="off"
+        />
+
+        <h3>Medicine Stock</h3>
+
+        <div class="medicine-table">
+          <div class="table-row header">
+            <strong>S.No</strong>
+            <strong>Medicine Name</strong>
+            <strong>Availability</strong>
+            <span></span>
+          </div>
+
+          @for (medicine of filteredMedicines; track medicine.medicineId; let index = $index) {
+            <div class="table-row">
+              <span>{{ index + 1 }}</span>
+              <span>{{ medicine.medicineName }}</span>
+              <span>{{ medicine.availableQuantity }}</span>
+              <button type="button" (click)="addMedicine(medicine)">
+                Add
+              </button>
+            </div>
+          } @empty {
+            <p class="empty-state">
+              {{ loading ? 'Loading medicines...' : 'No medicines found.' }}
+            </p>
+          }
+        </div>
+
+        @if (cart.length) {
+          <h3>Medicine Cart</h3>
+          <div class="cart-list">
+            @for (item of cart; track item.medicineId; let index = $index) {
+              <div class="cart-row">
+                <span>{{ index + 1 }}</span>
+                <strong>{{ item.medicineName }}</strong>
+                <div class="quantity-control">
+                  <button type="button" [disabled]="item.quantity <= 1" (click)="decrement(item)">−</button>
+                  <span>{{ item.quantity }}</span>
+                  <button type="button" (click)="increment(item)">+</button>
+                </div>
+                <button type="button" class="remove-button" (click)="remove(item)">
+                  ×
+                </button>
+              </div>
+            }
+          </div>
+        }
+
+        @if (errorMessage) {
+          <p class="validation-message">{{ errorMessage }}</p>
+        }
+      </div>
+
+      <footer class="dialog-footer">
+        <button type="button" class="submit-button" (click)="done()">
+          Done
+        </button>
+      </footer>
+    </section>
+  </div>
+}

@@ -1,0 +1,148 @@
+<section class="treatment-page">
+  <h1>Treatment</h1>
+
+  <form
+    class="treatment-form"
+    [formGroup]="form"
+    (ngSubmit)="save()"
+  >
+    <div class="patient-row">
+      <app-treatment-patient-selector
+        (patientChange)="onPatientChange($event)"
+      />
+
+      <input
+        type="date"
+        formControlName="treatmentDate"
+      />
+    </div>
+
+    <app-patient-health-snapshot
+      [snapshot]="healthSnapshot"
+      [loading]="loadingHealth"
+    />
+
+    <section class="form-section">
+      <h2>Chief Complaint</h2>
+      <app-treatment-problem-list
+        [problems]="problems"
+        (editProblem)="editProblem($event)"
+        (removeProblem)="removeProblem($event)"
+      />
+      <button
+        type="button"
+        class="pill-button"
+        (click)="addProblemOpen = true"
+      >
+        ＋ Add Problem
+      </button>
+    </section>
+
+    <section class="inline-section">
+      <h2>Treatment Type</h2>
+      <label>
+        <input type="radio" formControlName="treatmentType" value="ADVISED" />
+        Advised
+      </label>
+      <label>
+        <input type="radio" formControlName="treatmentType" value="DESIRED" />
+        Desired
+      </label>
+    </section>
+
+    <section class="form-section">
+      <label for="treatmentAmount">Treatment Amount</label>
+      <input
+        id="treatmentAmount"
+        type="number"
+        min="0"
+        step="0.01"
+        formControlName="treatmentAmount"
+        placeholder="Enter amount"
+      />
+      @if (form.controls.treatmentAmount.touched && form.controls.treatmentAmount.invalid) {
+        <p class="validation-message">Enter a valid treatment amount.</p>
+      }
+    </section>
+
+    <section class="form-section">
+      <h2>Medicine Prescription</h2>
+      @if (medicines.length) {
+        <div class="summary-list">
+          @for (medicine of medicines; track medicine.medicineId) {
+            <span>{{ medicine.medicineName }} × {{ medicine.quantity }}</span>
+          }
+        </div>
+      } @else {
+        <p class="empty-state">No medicines prescribed</p>
+      }
+      <button
+        type="button"
+        class="pill-button"
+        (click)="medicineOpen = true"
+      >
+        ＋ Add Medicines
+      </button>
+    </section>
+
+    <section class="form-section">
+      <h2>Scans</h2>
+      <app-scan-uploader
+        [scans]="scans"
+        (scansChange)="scans = $event"
+      />
+    </section>
+
+    <section class="form-section">
+      <label for="doctorNotes">Doctor Notes</label>
+      <textarea
+        id="doctorNotes"
+        formControlName="doctorNotes"
+        rows="6"
+        placeholder="Doctor notes"
+      ></textarea>
+    </section>
+
+    <footer class="form-footer">
+      <button
+        type="button"
+        class="reset-button"
+        (click)="reset()"
+      >
+        Reset
+      </button>
+      <button
+        type="submit"
+        class="save-button"
+        [disabled]="saving"
+      >
+        {{ saving ? 'Saving...' : 'Save' }}
+      </button>
+    </footer>
+  </form>
+</section>
+
+<app-add-problem
+  [open]="addProblemOpen"
+  [initialProblem]="editingProblem"
+  (close)="addProblemOpen = false; editingProblem = null; editingProblemIndex = null"
+  (problemAdd)="addProblem($event)"
+/>
+
+<app-medicine-selector
+  [open]="medicineOpen"
+  [cart]="medicines"
+  (close)="medicineOpen = false"
+  (cartChange)="medicines = $event"
+/>
+
+@if (snackbarMessage) {
+  <div
+    class="notification-strip"
+    [class.success]="snackbarType === 'success'"
+    [class.error]="snackbarType === 'error'"
+    role="alert"
+  >
+    {{ snackbarMessage }}
+  </div>
+}

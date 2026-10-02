@@ -1,0 +1,41 @@
+<div class="patient-selector">
+  <button
+    type="button"
+    class="selector-trigger"
+    [class.open]="dropdownOpen"
+    (click)="toggleDropdown()"
+  >
+    <span [class.placeholder]="!selectedPatientId">
+      {{ selectedLabel }}
+    </span>
+    <span class="arrow">▾</span>
+  </button>
+
+  @if (dropdownOpen) {
+    <div class="selector-panel">
+      <input
+        type="text"
+        placeholder="Search by ID / Name"
+        [(ngModel)]="search"
+        autocomplete="off"
+      />
+
+      <div class="patient-options">
+        @for (patient of filteredPatients; track patient.patientId) {
+          <button
+            type="button"
+            class="patient-option"
+            (click)="selectPatient(patient)"
+          >
+            <strong>{{ patient.patientId }}</strong>
+            <span>{{ patient.fullName }}</span>
+          </button>
+        } @empty {
+          <p class="empty-state">
+            {{ loading ? 'Loading patients...' : 'No patients found.' }}
+          </p>
+        }
+      </div>
+    </div>
+  }
+</div>

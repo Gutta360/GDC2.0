@@ -1,0 +1,62 @@
+.problem-list {
+  display: grid;
+  gap: 10px;
+  margin: 10px 0 14px;
+}
+
+.problem-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid #d9dee7;
+  border-radius: 8px;
+  background: #ffffff;
+
+  strong,
+  span,
+  small {
+    display: block;
+  }
+
+  strong {
+    margin-bottom: 4px;
+  }
+
+  span,
+  small {
+    color: #4b5563;
+    font-size: 13px;
+  }
+
+  p {
+    margin: 6px 0;
+    color: #111827;
+  }
+
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+
+  button {
+    align-self: flex-start;
+    border: 0;
+    background: transparent;
+    color: #6941c6;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+
+    &.remove {
+      color: #b42318;
+    }
+  }
+}
+
+.empty-state {
+  margin: 8px 0 14px;
+  color: #98a2b3;
+  font-size: 14px;
+}

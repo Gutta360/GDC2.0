@@ -1,0 +1,181 @@
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background: rgba(0, 0, 0, 0.52);
+}
+
+.problem-dialog {
+  width: min(1160px, 100%);
+  max-height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.dialog-header {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: #000000;
+  color: #ffffff;
+
+  h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 800;
+  }
+
+  button {
+    border: 0;
+    background: transparent;
+    color: #ffffff;
+    font-size: 36px;
+    line-height: 1;
+    cursor: pointer;
+  }
+}
+
+.dialog-body {
+  overflow: auto;
+  padding: 20px;
+}
+
+.tooth-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 24px;
+  margin-bottom: 20px;
+}
+
+.quadrant h3,
+.canal-section h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.teeth {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(44px, 1fr));
+  gap: 8px;
+}
+
+.tooth {
+  aspect-ratio: 1;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111827;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+
+  &.selected {
+    background: #0ea5a4;
+    border-color: #0ea5a4;
+    color: #ffffff;
+  }
+}
+
+select,
+input,
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #7b7f89;
+  border-radius: 16px;
+  background: #f8fafc;
+  color: #111827;
+  font: inherit;
+  font-size: 15px;
+}
+
+select,
+input {
+  min-height: 54px;
+  padding: 0 16px;
+}
+
+textarea {
+  margin-top: 16px;
+  padding: 14px 16px;
+  resize: vertical;
+}
+
+.conditional-panel {
+  margin-top: 16px;
+}
+
+.inline-options {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+
+  &.compact {
+    margin-top: 8px;
+  }
+
+  label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.canal-section {
+  margin-top: 16px;
+}
+
+.validation-message {
+  margin: 12px 0 0;
+  color: #b42318;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 20px 20px;
+}
+
+.submit-button {
+  min-width: 96px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: #000000;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 760px) {
+  .tooth-grid,
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teeth {
+    grid-template-columns: repeat(4, minmax(44px, 1fr));
+  }
+}

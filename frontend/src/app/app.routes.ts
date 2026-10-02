@@ -9,6 +9,8 @@ import { PatientRegistration } from './features/patients/registration/patient-re
 import { PatientDetails } from './features/patients/details/patient-details/patient-details';
 import { PatientEdit } from './features/patients/edit/patient-edit/patient-edit';
 import { AppointmentCalendar } from './features/appointments/calendar/appointment-calendar';
+import { Treatment } from './features/treatments/treatment/treatment';
+import { FollowUp } from './features/treatments/follow-up/follow-up';
 
 export const routes: Routes = [
 
@@ -85,6 +87,22 @@ export const routes: Routes = [
         path: 'appointments/calendar',
 
         component: AppointmentCalendar
+
+      },
+
+      {
+
+        path: 'treatments',
+
+        component: Treatment
+
+      },
+
+      {
+
+        path: 'treatments/follow-up',
+
+        component: FollowUp
 
       }
 

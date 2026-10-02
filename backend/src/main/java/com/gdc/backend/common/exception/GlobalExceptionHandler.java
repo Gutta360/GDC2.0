@@ -7,6 +7,9 @@ import com.gdc.backend.appointment.exception.SchedulingValidationException;
 import com.gdc.backend.patient.exception.DuplicatePatientException;
 import com.gdc.backend.patient.exception.PatientNotFoundException;
 import com.gdc.backend.patient.exception.PatientValidationException;
+import com.gdc.backend.treatment.exception.FollowUpNotFoundException;
+import com.gdc.backend.treatment.exception.TreatmentNotFoundException;
+import com.gdc.backend.treatment.exception.TreatmentValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -41,7 +44,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             PatientValidationException.class,
-            SchedulingValidationException.class
+            SchedulingValidationException.class,
+            TreatmentValidationException.class
     })
     public ResponseEntity<ApiErrorResponse> handleBadRequest(RuntimeException exception) {
         return buildResponse(HttpStatus.BAD_REQUEST, exception.getMessage(), Map.of());
@@ -50,7 +54,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             PatientNotFoundException.class,
             AppointmentNotFoundException.class,
-            DoctorBusyNotFoundException.class
+            DoctorBusyNotFoundException.class,
+            TreatmentNotFoundException.class,
+            FollowUpNotFoundException.class
     })
     public ResponseEntity<ApiErrorResponse> handleNotFound(RuntimeException exception) {
         return buildResponse(HttpStatus.NOT_FOUND, exception.getMessage(), Map.of());

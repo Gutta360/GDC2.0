@@ -17,6 +17,8 @@ public interface AppointmentService {
 
     AppointmentResponse getAppointment(String appointmentId);
 
+    AppointmentResponse getLatestForPatient(String patientId);
+
     List<AppointmentCalendarDayResponse> getCalendar(LocalDate from, LocalDate to);
 
     AppointmentDayResponse getDay(LocalDate date);

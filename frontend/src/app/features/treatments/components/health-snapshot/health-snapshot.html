@@ -1,0 +1,70 @@
+@if (loading) {
+  <p class="loading-state">Loading health information...</p>
+} @else if (snapshot) {
+  <section class="snapshot-card">
+    <header>
+      <strong>Patient Health Snapshot</strong>
+      <span>{{ snapshot.appointmentDateTime | date:'EEEE dd-MMM-yyyy h:mm a' }}</span>
+    </header>
+
+    <div class="snapshot-row">
+      <strong>Vitals</strong>
+      <div>
+        <span>BP: {{ snapshot.systolicBp ?? '--' }} / {{ snapshot.diastolicBp ?? '--' }}</span>
+        <span>HR: {{ snapshot.heartRate ?? '--' }}</span>
+        <span>BR: {{ snapshot.breathingRate ?? '--' }}</span>
+        <span>Ht/Wt: {{ snapshot.heightCm ?? '--' }} / {{ snapshot.weightKg ?? '--' }}</span>
+        <span>BMI: {{ snapshot.bmi ?? '--' }}</span>
+        <span>FBS/RBS: {{ snapshot.fbs ?? '--' }} / {{ snapshot.rbs ?? '--' }}</span>
+      </div>
+    </div>
+
+    <div class="snapshot-row">
+      <strong>Health</strong>
+      <div>
+        <span>Diabetes: {{ yesNo(snapshot.hasDiabetes) }}</span>
+        <span>Hypertension: {{ yesNo(snapshot.hasHypertension) }}</span>
+        <span>Heart Disease: {{ yesNo(snapshot.hasHeartDisease) }}</span>
+        <span>Asthma: {{ yesNo(snapshot.hasAsthma) }}</span>
+        <span>Kidney: {{ yesNo(snapshot.hasKidneyDisease) }}</span>
+        <span>Liver: {{ yesNo(snapshot.hasLiverDisease) }}</span>
+      </div>
+    </div>
+
+    <div class="snapshot-row">
+      <strong>Allergies</strong>
+      <div>
+        <span>Drug: {{ yesNo(snapshot.hasDrugAllergy) }}</span>
+        <span>Food: {{ yesNo(snapshot.hasFoodAllergy) }}</span>
+        <span>Latex: {{ yesNo(snapshot.hasLatexAllergy) }}</span>
+        @if (snapshot.otherAllergyNotes) {
+          <span>Notes: {{ snapshot.otherAllergyNotes }}</span>
+        }
+      </div>
+    </div>
+
+    <div class="snapshot-row">
+      <strong>Dental</strong>
+      <div>
+        <span>Root Canal: {{ yesNo(snapshot.hasRootCanal) }}</span>
+        <span>Implants: {{ yesNo(snapshot.hasImplants) }}</span>
+        <span>Crowns/Bridges: {{ yesNo(snapshot.hasCrownsOrBridges) }}</span>
+        <span>Braces: {{ yesNo(snapshot.hasBraces) }}</span>
+        <span>Dentures: {{ yesNo(snapshot.hasDentures) }}</span>
+        @if (snapshot.dentalComplicationNotes) {
+          <span>Notes: {{ snapshot.dentalComplicationNotes }}</span>
+        }
+      </div>
+    </div>
+
+    <div class="snapshot-row">
+      <strong>Consent</strong>
+      <div>
+        <span>{{ snapshot.consentGiven ? 'Consent Given' : 'Consent Not Given' }}</span>
+        @if (snapshot.consentReference) {
+          <span>{{ snapshot.consentReference }}</span>
+        }
+      </div>
+    </div>
+  </section>
+}
