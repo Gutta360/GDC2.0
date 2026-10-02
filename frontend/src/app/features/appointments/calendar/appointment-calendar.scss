@@ -369,6 +369,13 @@ input[type='radio'] {
   }
 }
 
+.search-status {
+  padding: 12px 14px;
+  background: #ffffff;
+  color: #737985;
+  font-weight: 700;
+}
+
 @media (max-width: 900px) {
   .appointment-page,
   .dialog-backdrop {

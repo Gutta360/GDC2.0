@@ -149,7 +149,9 @@
           <section class="day-section">
             <h3>Doctor busy hours</h3>
 
-            @if (!dayDetails?.doctorBusySlots?.length) {
+            @if (loadingDay) {
+              <p class="muted">Loading busy hours...</p>
+            } @else if (!dayDetails?.doctorBusySlots?.length) {
               <p class="muted">No busy hours logged.</p>
             } @else {
               <div class="day-list">
@@ -184,13 +186,15 @@
                 placeholder="Search by Patient ID or name"
                 [(ngModel)]="patientSearch"
                 [ngModelOptions]="{ standalone: true }"
-                (input)="searchPatients()"
+                (ngModelChange)="onPatientSearchChange($event)"
+                (focus)="searchPatients()"
+                autocomplete="off"
               />
               <input type="hidden" formControlName="patientId" />
 
-              @if (patients.length) {
+              @if (patientDropdownOpen && patientSearch.trim()) {
                 <div class="search-results">
-                  @for (patient of patients; track patient.patientId) {
+                  @for (patient of filteredPatients; track patient.patientId) {
                     <button
                       type="button"
                       (click)="selectPatient(patient)"
@@ -199,6 +203,10 @@
                       {{ patient.fullName }}
                       <small>{{ patient.mobile }}</small>
                     </button>
+                  } @empty {
+                    <div class="search-status">
+                      {{ searchingPatients ? 'Loading patients...' : 'No patients found.' }}
+                    </div>
                   }
                 </div>
               }

@@ -1,5 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -60,7 +64,9 @@ export class AppointmentCalendar implements OnInit {
   createOpen = false;
   busyOpen = false;
   patientSearch = '';
-  patients: PatientSummary[] = [];
+  patientDropdownOpen = false;
+  allPatients: PatientSummary[] = [];
+  filteredPatients: PatientSummary[] = [];
   searchingPatients = false;
   availability: AppointmentSlot[] = [];
 
@@ -90,7 +96,8 @@ export class AppointmentCalendar implements OnInit {
   constructor(
     private fb: FormBuilder,
     private appointmentService: AppointmentService,
-    private patientService: PatientService
+    private patientService: PatientService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -103,6 +110,7 @@ export class AppointmentCalendar implements OnInit {
 
     this.buildForms();
     this.loadCalendar();
+    this.loadPatients();
   }
 
   get monthTitle(): string {
@@ -179,15 +187,18 @@ export class AppointmentCalendar implements OnInit {
     this.selectedDateIso = cell.isoDate;
     this.createOpen = false;
     this.busyOpen = false;
-    this.loadDayDetails();
+    this.loadDayDetails(cell.isoDate);
+    this.loadAvailability(cell.isoDate);
   }
 
   closeDay(): void {
     this.dayDetails = null;
     this.selectedDate = null;
     this.selectedDateIso = '';
+    this.loadingDay = false;
     this.createOpen = false;
     this.busyOpen = false;
+    this.patientDropdownOpen = false;
   }
 
   openCreateAppointment(): void {
@@ -220,7 +231,12 @@ export class AppointmentCalendar implements OnInit {
       consentGiven: false
     });
     this.patientSearch = '';
-    this.patients = [];
+    this.filteredPatients = [];
+    this.patientDropdownOpen = false;
+    this.appointmentForm.patchValue({
+      patientId: ''
+    });
+    this.ensurePatientsLoaded();
     this.loadAvailability();
   }
 
@@ -245,31 +261,62 @@ export class AppointmentCalendar implements OnInit {
     this.busyOpen = false;
   }
 
+  onPatientSearchChange(
+    value: string
+  ): void {
+
+    this.patientSearch = value;
+    this.searchPatients();
+  }
+
   searchPatients(): void {
 
     const query =
-      this.patientSearch.trim();
+      this.patientSearch
+        .trim()
+        .toLowerCase();
 
-    if (query.length < 2) {
-      this.patients = [];
+    this.patientDropdownOpen = true;
+    this.ensurePatientsLoaded();
+
+    const selectedPatientId =
+      this.appointmentForm.value.patientId;
+
+    if (selectedPatientId) {
+      const selectedPatient =
+        this.allPatients.find(patient =>
+          patient.patientId === selectedPatientId
+        );
+
+      if (!selectedPatient || this.patientLabel(selectedPatient) !== this.patientSearch) {
+        this.appointmentForm.patchValue({
+          patientId: ''
+        });
+      }
+    }
+
+    if (!query) {
+      this.filteredPatients = [];
       return;
     }
 
-    this.searchingPatients = true;
+    this.filteredPatients =
+      this.allPatients
+        .filter(patient => {
 
-    this.patientService
-      .searchActivePatients(query)
-      .pipe(finalize(() => {
-        this.searchingPatients = false;
-      }))
-      .subscribe({
-        next: patients => {
-          this.patients = patients;
-        },
-        error: () => {
-          this.patients = [];
-        }
-      });
+          const fullName =
+            patient.fullName ||
+            `${patient.firstName} ${patient.lastName ?? ''}`.trim();
+
+          return (
+            patient.patientId.toLowerCase().includes(query) ||
+            fullName.toLowerCase().includes(query) ||
+            (patient.mobile ?? '').includes(query)
+          );
+        })
+        .slice(0, 20);
+
+    this.cdr.detectChanges();
   }
 
   selectPatient(
@@ -281,9 +328,22 @@ export class AppointmentCalendar implements OnInit {
     });
 
     this.patientSearch =
-      `${patient.patientId}  ${patient.fullName}`;
+      this.patientLabel(patient);
 
-    this.patients = [];
+    this.filteredPatients = [];
+    this.patientDropdownOpen = false;
+    this.cdr.detectChanges();
+  }
+
+  patientLabel(
+    patient: PatientSummary
+  ): string {
+
+    const fullName =
+      patient.fullName ||
+      `${patient.firstName} ${patient.lastName ?? ''}`.trim();
+
+    return `${patient.patientId}  ${fullName}`;
   }
 
   submitAppointment(): void {
@@ -512,6 +572,7 @@ export class AppointmentCalendar implements OnInit {
       .getCalendar(from, to)
       .pipe(finalize(() => {
         this.loadingCalendar = false;
+        this.cdr.detectChanges();
       }))
       .subscribe({
         next: days => {
@@ -522,19 +583,25 @@ export class AppointmentCalendar implements OnInit {
             ...cell,
             counts: this.calendarCounts.get(cell.isoDate)
           }));
+          this.cdr.detectChanges();
         },
         error: error => {
           this.errorMessage =
             error?.error?.message ?? 'Could not load appointment calendar.';
+          this.cdr.detectChanges();
         }
       });
   }
 
-  private loadDayDetails(): void {
+  private loadDayDetails(
+    dateIso: string = this.selectedDateIso
+  ): void {
 
-    if (!this.selectedDateIso) {
+    if (!dateIso) {
       return;
     }
+
+    const requestedDateIso = dateIso;
 
     this.loadingDay = true;
     this.dayDetails = null;
@@ -542,35 +609,66 @@ export class AppointmentCalendar implements OnInit {
     this.successMessage = '';
 
     this.appointmentService
-      .getDay(this.selectedDateIso)
+      .getDay(requestedDateIso)
       .pipe(finalize(() => {
-        this.loadingDay = false;
+        if (this.selectedDateIso === requestedDateIso) {
+          this.loadingDay = false;
+          this.cdr.detectChanges();
+        }
       }))
       .subscribe({
         next: day => {
-          this.dayDetails = day;
+          if (this.selectedDateIso !== requestedDateIso) {
+            return;
+          }
+
+          this.dayDetails = {
+            ...day,
+            appointments: day.appointments ?? [],
+            doctorBusySlots: day.doctorBusySlots ?? []
+          };
+          this.cdr.detectChanges();
         },
         error: error => {
+          if (this.selectedDateIso !== requestedDateIso) {
+            return;
+          }
+
           this.errorMessage =
             error?.error?.message ?? 'Could not load day details.';
+          this.cdr.detectChanges();
         }
       });
   }
 
-  private loadAvailability(): void {
+  private loadAvailability(
+    dateIso: string = this.selectedDateIso
+  ): void {
 
-    if (!this.selectedDateIso) {
+    if (!dateIso) {
       return;
     }
 
+    const requestedDateIso = dateIso;
+
     this.appointmentService
-      .getAvailability(this.selectedDateIso)
+      .getAvailability(requestedDateIso)
       .subscribe({
         next: availability => {
+          if (this.selectedDateIso !== requestedDateIso) {
+            return;
+          }
+
           this.availability = availability.slots;
+          this.cdr.detectChanges();
         },
         error: () => {
+          if (this.selectedDateIso !== requestedDateIso) {
+            return;
+          }
+
           this.availability = [];
+          this.cdr.detectChanges();
         }
       });
   }
@@ -579,6 +677,47 @@ export class AppointmentCalendar implements OnInit {
     this.loadCalendar();
     this.loadDayDetails();
     this.loadAvailability();
+  }
+
+  private loadPatients(): void {
+
+    this.searchingPatients = true;
+
+    this.patientService
+      .getAllPatients()
+      .pipe(finalize(() => {
+        this.searchingPatients = false;
+        this.cdr.detectChanges();
+      }))
+      .subscribe({
+        next: patients => {
+          this.allPatients = patients.map(patient => ({
+            patientId: patient.patientId,
+            firstName: patient.firstName,
+            lastName: patient.lastName,
+            fullName: patient.fullName,
+            mobile: patient.mobile
+          }));
+
+          if (this.patientSearch.trim()) {
+            this.searchPatients();
+          }
+
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.allPatients = [];
+          this.filteredPatients = [];
+          this.cdr.detectChanges();
+        }
+      });
+  }
+
+  private ensurePatientsLoaded(): void {
+
+    if (!this.allPatients.length && !this.searchingPatients) {
+      this.loadPatients();
+    }
   }
 
   private buildCalendarCells(): CalendarCell[] {
