@@ -1,0 +1,55 @@
+<section class="payment-page">
+  <h1>Payment History</h1>
+
+  <section class="form-section">
+    <h2>Patient Search</h2>
+    <app-treatment-patient-selector
+      (patientChange)="onPatientChange($event)"
+    />
+  </section>
+
+  <section class="history-section">
+    @if (payments.length) {
+      <div class="history-list">
+        @for (payment of payments; track payment.paymentId) {
+          <article class="history-card">
+            <div>
+              <span>Payment ID</span>
+              <strong>{{ payment.paymentId }}</strong>
+            </div>
+            <div>
+              <span>Paid At</span>
+              <strong>{{ payment.paidAt | date:'medium' }}</strong>
+            </div>
+            <div>
+              <span>Paid Amount</span>
+              <strong>{{ payment.amount | number:'1.2-2' }}</strong>
+            </div>
+            <div>
+              <span>Payment Details</span>
+              <strong>{{ payment.details || '-' }}</strong>
+            </div>
+            <div>
+              <span>Payment For</span>
+              <strong>{{ payment.paymentFor }} {{ payment.treatmentId }}</strong>
+            </div>
+            <div>
+              <span>Payment Mode</span>
+              <strong>{{ payment.paymentMode }}</strong>
+            </div>
+          </article>
+        }
+      </div>
+    } @else {
+      <p class="empty-state">
+        {{ emptyMessage }}
+      </p>
+    }
+  </section>
+
+  @if (snackbarMessage) {
+    <div class="notification-strip" [class.success]="snackbarType === 'success'" [class.error]="snackbarType === 'error'">
+      {{ snackbarMessage }}
+    </div>
+  }
+</section>

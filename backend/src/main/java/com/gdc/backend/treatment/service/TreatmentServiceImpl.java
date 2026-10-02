@@ -34,6 +34,8 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -96,6 +98,7 @@ public class TreatmentServiceImpl implements TreatmentService {
     private final FollowUpRepository followUpRepository;
     private final TreatmentMapper treatmentMapper;
     private final ScanStorageService scanStorageService;
+    private final Clock clock;
 
     public TreatmentServiceImpl(
             PatientRepository patientRepository,
@@ -103,7 +106,8 @@ public class TreatmentServiceImpl implements TreatmentService {
             TreatmentRepository treatmentRepository,
             FollowUpRepository followUpRepository,
             TreatmentMapper treatmentMapper,
-            ScanStorageService scanStorageService
+            ScanStorageService scanStorageService,
+            Clock clock
     ) {
         this.patientRepository = patientRepository;
         this.medicineRepository = medicineRepository;
@@ -111,6 +115,7 @@ public class TreatmentServiceImpl implements TreatmentService {
         this.followUpRepository = followUpRepository;
         this.treatmentMapper = treatmentMapper;
         this.scanStorageService = scanStorageService;
+        this.clock = clock;
     }
 
     @Override
@@ -316,6 +321,10 @@ public class TreatmentServiceImpl implements TreatmentService {
                     .orElseThrow(() -> new TreatmentValidationException("Medicine not found: " + entry.getKey()));
 
             Integer quantity = entry.getValue();
+
+            if (medicine.getExpiryDate().isBefore(LocalDate.now(clock))) {
+                throw new TreatmentValidationException("Medicine is expired: " + medicine.getMedicineName());
+            }
 
             if (quantity > medicine.getAvailableQuantity()) {
                 throw new TreatmentValidationException(

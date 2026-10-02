@@ -7,11 +7,23 @@ import com.gdc.backend.appointment.exception.SchedulingValidationException;
 import com.gdc.backend.patient.exception.DuplicatePatientException;
 import com.gdc.backend.patient.exception.PatientNotFoundException;
 import com.gdc.backend.patient.exception.PatientValidationException;
+import com.gdc.backend.payment.exception.PaymentConflictException;
+import com.gdc.backend.payment.exception.PaymentNotFoundException;
+import com.gdc.backend.payment.exception.PaymentValidationException;
+import com.gdc.backend.pharmacy.exception.PharmacyConflictException;
+import com.gdc.backend.pharmacy.exception.PharmacyNotFoundException;
+import com.gdc.backend.pharmacy.exception.PharmacyValidationException;
 import com.gdc.backend.treatment.exception.FollowUpNotFoundException;
 import com.gdc.backend.treatment.exception.TreatmentNotFoundException;
 import com.gdc.backend.treatment.exception.TreatmentValidationException;
+import jakarta.persistence.LockTimeoutException;
+import jakarta.persistence.PessimisticLockException;
+import org.springframework.dao.CannotAcquireLockException;
+import org.springframework.dao.DeadlockLoserDataAccessException;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -45,10 +57,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             PatientValidationException.class,
             SchedulingValidationException.class,
-            TreatmentValidationException.class
+            TreatmentValidationException.class,
+            PharmacyValidationException.class,
+            PaymentValidationException.class
     })
     public ResponseEntity<ApiErrorResponse> handleBadRequest(RuntimeException exception) {
         return buildResponse(HttpStatus.BAD_REQUEST, exception.getMessage(), Map.of());
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiErrorResponse> handleUnreadableRequest(HttpMessageNotReadableException exception) {
+        return buildResponse(HttpStatus.BAD_REQUEST, "Malformed request body", Map.of());
     }
 
     @ExceptionHandler({
@@ -56,7 +75,9 @@ public class GlobalExceptionHandler {
             AppointmentNotFoundException.class,
             DoctorBusyNotFoundException.class,
             TreatmentNotFoundException.class,
-            FollowUpNotFoundException.class
+            FollowUpNotFoundException.class,
+            PharmacyNotFoundException.class,
+            PaymentNotFoundException.class
     })
     public ResponseEntity<ApiErrorResponse> handleNotFound(RuntimeException exception) {
         return buildResponse(HttpStatus.NOT_FOUND, exception.getMessage(), Map.of());
@@ -64,10 +85,27 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             DuplicatePatientException.class,
-            SchedulingConflictException.class
+            SchedulingConflictException.class,
+            PharmacyConflictException.class,
+            PaymentConflictException.class
     })
     public ResponseEntity<ApiErrorResponse> handleConflict(RuntimeException exception) {
         return buildResponse(HttpStatus.CONFLICT, exception.getMessage(), Map.of());
+    }
+
+    @ExceptionHandler({
+            CannotAcquireLockException.class,
+            DeadlockLoserDataAccessException.class,
+            PessimisticLockingFailureException.class,
+            PessimisticLockException.class,
+            LockTimeoutException.class
+    })
+    public ResponseEntity<ApiErrorResponse> handlePharmacyConcurrency(RuntimeException exception) {
+        return buildResponse(
+                HttpStatus.CONFLICT,
+                "The pharmacy transaction could not be completed because the stock changed. Please refresh and try again.",
+                Map.of()
+        );
     }
 
     private ResponseEntity<ApiErrorResponse> buildResponse(

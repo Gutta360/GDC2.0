@@ -13,6 +13,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "medicines")
@@ -31,6 +32,9 @@ public class Medicine {
 
     @Column(name = "available_quantity", nullable = false)
     private Integer availableQuantity = 0;
+
+    @Column(name = "expiry_date", nullable = false)
+    private LocalDate expiryDate;
 
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
@@ -54,6 +58,8 @@ public class Medicine {
     public void setMedicineName(String medicineName) { this.medicineName = medicineName; }
     public Integer getAvailableQuantity() { return availableQuantity; }
     public void setAvailableQuantity(Integer availableQuantity) { this.availableQuantity = availableQuantity; }
+    public LocalDate getExpiryDate() { return expiryDate; }
+    public void setExpiryDate(LocalDate expiryDate) { this.expiryDate = expiryDate; }
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
     public Instant getCreatedAt() { return createdAt; }

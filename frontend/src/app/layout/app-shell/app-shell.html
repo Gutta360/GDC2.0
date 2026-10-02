@@ -127,24 +127,72 @@
       </div>
 
 
-      <!-- Payment -->
-      <a
-        routerLink="/payments"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-        Payment
-      </a>
+      <!-- Payment Dropdown -->
+      <div class="nav-dropdown">
+
+        <a
+          routerLink="/payments"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          Payment
+        </a>
+
+        <div class="dropdown-menu">
+
+          <a
+            routerLink="/payments"
+            routerLinkActive="active"
+            class="dropdown-item"
+          >
+            Payment
+          </a>
+
+          <a
+            routerLink="/payments/history"
+            routerLinkActive="active"
+            class="dropdown-item"
+          >
+            History
+          </a>
+
+        </div>
+
+      </div>
 
 
-      <!-- Pharmacy -->
-      <a
-        routerLink="/pharmacy"
-        routerLinkActive="active"
-        class="nav-item"
-      >
-        Pharmacy
-      </a>
+      <!-- Pharmacy Dropdown -->
+      <div class="nav-dropdown">
+
+        <a
+          routerLink="/pharmacy"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          Pharmacy
+        </a>
+
+        <div class="dropdown-menu">
+
+          <a
+            routerLink="/pharmacy"
+            routerLinkActive="active"
+            class="dropdown-item"
+          >
+            Pharmacy
+          </a>
+
+          <a
+            routerLink="/pharmacy/stock"
+            routerLinkActive="active"
+            class="dropdown-item"
+          >
+            Stock
+          </a>
+
+        </div>
+
+      </div>
 
     </nav>
 

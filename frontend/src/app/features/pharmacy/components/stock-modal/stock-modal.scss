@@ -1,0 +1,111 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.56);
+}
+
+.stock-dialog {
+  width: min(520px, 100%);
+  border-radius: 18px;
+  background: #ffffff;
+  padding: 28px;
+  color: #111827;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+
+  h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+  }
+}
+
+.icon-button {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  background: transparent;
+  color: #111827;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+form {
+  display: grid;
+  gap: 14px;
+}
+
+input {
+  width: 100%;
+  min-height: 54px;
+  box-sizing: border-box;
+  border: 1px solid #7b7f89;
+  border-radius: 16px;
+  background: #f8fafc;
+  color: #111827;
+  font: inherit;
+  font-size: 15px;
+  padding: 0 16px;
+}
+
+footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.primary-button,
+.secondary-button,
+.danger-button {
+  min-height: 43px;
+  border-radius: 999px;
+  padding: 0 26px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.primary-button {
+  border: 0;
+  background: #111827;
+  color: #ffffff;
+}
+
+.secondary-button {
+  border: 1px solid #7b61b5;
+  background: #ffffff;
+  color: #7b61b5;
+}
+
+.danger-button {
+  border: 0;
+  background: #b42318;
+  color: #ffffff;
+}
+
+.validation-message,
+.confirm-message {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.validation-message {
+  color: #b42318;
+}
+
+.confirm-message {
+  color: #7a2e0e;
+}

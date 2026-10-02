@@ -28,7 +28,10 @@ import java.lang.reflect.Proxy;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Clock;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +39,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class TreatmentServiceImplTest {
+
+    private static final Clock CLOCK = Clock.fixed(
+            Instant.parse("2026-10-02T00:00:00Z"),
+            ZoneId.of("UTC")
+    );
 
     @TempDir
     Path scanDir;
@@ -135,6 +143,25 @@ class TreatmentServiceImplTest {
     }
 
     @Test
+    void createTreatmentRejectsExpiredMedicine() {
+
+        service = serviceWithRepositories(
+                defaultTreatmentRepository(),
+                defaultFollowUpRepository(),
+                LocalDate.parse("2026-10-01")
+        );
+
+        TreatmentCreateRequest request = baseRequest(
+                List.of(),
+                List.of(new PrescriptionItemRequest("M-00001", 1))
+        );
+
+        assertThatThrownBy(() -> service.createTreatment(request, List.of()))
+                .isInstanceOf(TreatmentValidationException.class)
+                .hasMessageContaining("Medicine is expired");
+    }
+
+    @Test
     void createTreatmentRejectsEmptyScan() {
 
         MultipartFile emptyScan = new MockMultipartFile(
@@ -210,6 +237,18 @@ class TreatmentServiceImplTest {
             TreatmentRepository treatmentRepository,
             FollowUpRepository followUpRepository
     ) {
+        return serviceWithRepositories(
+                treatmentRepository,
+                followUpRepository,
+                LocalDate.parse("2027-01-08")
+        );
+    }
+
+    private TreatmentServiceImpl serviceWithRepositories(
+            TreatmentRepository treatmentRepository,
+            FollowUpRepository followUpRepository,
+            LocalDate medicineExpiryDate
+    ) {
 
         PatientRepository patientRepository = repositoryProxy(
                 PatientRepository.class,
@@ -222,7 +261,7 @@ class TreatmentServiceImplTest {
         MedicineRepository medicineRepository = repositoryProxy(
                 MedicineRepository.class,
                 invocation -> switch (invocation.method().getName()) {
-                    case "findByMedicineIdAndActiveTrue" -> Optional.of(medicine());
+                    case "findByMedicineIdAndActiveTrue" -> Optional.of(medicine(medicineExpiryDate));
                     default -> defaultValue(invocation.method().getReturnType());
                 }
         );
@@ -233,7 +272,8 @@ class TreatmentServiceImplTest {
                 treatmentRepository,
                 followUpRepository,
                 new TreatmentMapper(),
-                new ScanStorageService(scanDir.toString())
+                new ScanStorageService(scanDir.toString()),
+                CLOCK
         );
     }
 
@@ -321,12 +361,13 @@ class TreatmentServiceImplTest {
         return patient;
     }
 
-    private Medicine medicine() {
+    private Medicine medicine(LocalDate expiryDate) {
 
         Medicine medicine = new Medicine();
         medicine.setMedicineId("M-00001");
         medicine.setMedicineName("Chymoral forte");
         medicine.setAvailableQuantity(5);
+        medicine.setExpiryDate(expiryDate);
         medicine.setActive(true);
 
         return medicine;

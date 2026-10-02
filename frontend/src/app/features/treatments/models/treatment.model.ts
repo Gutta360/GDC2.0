@@ -29,6 +29,7 @@ export interface Medicine {
   medicineId: string;
   medicineName: string;
   availableQuantity: number;
+  expiryDate: string;
 }
 
 export interface PrescriptionItemRequest {

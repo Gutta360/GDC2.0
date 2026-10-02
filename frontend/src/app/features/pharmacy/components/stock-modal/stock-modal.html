@@ -1,0 +1,61 @@
+@if (open) {
+  <div class="modal-backdrop">
+    <section class="stock-dialog">
+      <header>
+        <h2>{{ title }}</h2>
+        <button type="button" class="icon-button" (click)="close.emit()">×</button>
+      </header>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <input
+          type="text"
+          formControlName="medicineName"
+          placeholder="Medicine Name"
+          autocomplete="off"
+        />
+
+        <input
+          type="number"
+          min="0"
+          step="1"
+          formControlName="quantity"
+          placeholder="Quantity"
+        />
+
+        <input
+          type="date"
+          formControlName="expiryDate"
+          [attr.min]="medicine ? null : today"
+          placeholder="Expiry Date"
+        />
+
+        @if (form.touched && form.invalid) {
+          <p class="validation-message">Enter valid medicine stock details.</p>
+        }
+
+        @if (pastExpiryInvalid) {
+          <p class="validation-message">Expiry date cannot be in the past.</p>
+        }
+
+        @if (confirmDelete) {
+          <p class="confirm-message">Delete this stock item from active lists?</p>
+        }
+
+        <footer>
+          @if (medicine) {
+            @if (confirmDelete) {
+              <button type="button" class="secondary-button" (click)="confirmDelete = false">Cancel</button>
+              <button type="button" class="danger-button" [disabled]="saving" (click)="deleteStock.emit()">Confirm</button>
+            } @else {
+              <button type="button" class="secondary-button" [disabled]="saving" (click)="requestDelete()">Delete</button>
+            }
+          }
+
+          <button type="submit" class="primary-button" [disabled]="saving">
+            {{ saving ? 'Saving...' : 'Done' }}
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+}

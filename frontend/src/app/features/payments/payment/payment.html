@@ -1,0 +1,95 @@
+<section class="payment-page">
+  <h1>Make Payment</h1>
+
+  <form class="payment-form" [formGroup]="form" (ngSubmit)="pay()">
+    <section class="form-section">
+      <h2>Select Patient</h2>
+      <app-treatment-patient-selector
+        (patientChange)="onPatientChange($event)"
+      />
+    </section>
+
+    <section class="form-section">
+      <h2>Outstanding Treatments</h2>
+
+      @if (outstandingTreatments.length) {
+        <div class="treatment-table">
+          <div class="treatment-head">
+            <strong>Treatment</strong>
+            <strong>Date</strong>
+            <strong>Type</strong>
+            <strong>Amount</strong>
+          </div>
+
+          @for (treatment of outstandingTreatments; track treatment.treatmentId) {
+            <button
+              type="button"
+              class="treatment-row"
+              [class.selected]="form.controls.treatmentId.value === treatment.treatmentId"
+              (click)="selectTreatment(treatment)"
+            >
+              <span>{{ treatment.treatmentId }}</span>
+              <span>{{ treatment.treatmentDate | date:'mediumDate' }}</span>
+              <span>{{ treatment.treatmentType }}</span>
+              <strong>{{ treatment.outstandingAmount | number:'1.2-2' }}</strong>
+            </button>
+          }
+        </div>
+      } @else {
+        <p class="empty-state">
+          {{ loading ? 'Loading outstanding treatments...' : 'No unpaid treatments' }}
+        </p>
+      }
+    </section>
+
+    <section class="inline-section">
+      <h2>Payment Mode</h2>
+      <label>
+        <input type="radio" formControlName="paymentMode" value="CASH" />
+        Cash
+      </label>
+      <label>
+        <input type="radio" formControlName="paymentMode" value="UPI" />
+        UPI
+      </label>
+    </section>
+
+    <section class="form-section">
+      <label for="paymentAmount">Payment Amount</label>
+      <input
+        id="paymentAmount"
+        type="text"
+        [value]="payableAmount | number:'1.2-2'"
+        readonly
+        placeholder="Auto calculated"
+      />
+    </section>
+
+    <section class="form-section">
+      <label for="paymentDetails">Payment Details</label>
+      <textarea
+        id="paymentDetails"
+        formControlName="details"
+        rows="4"
+        placeholder="Txn no / notes"
+      ></textarea>
+    </section>
+
+    <footer class="form-footer">
+      <button type="button" class="reset-button" [disabled]="saving" (click)="reset()">Reset</button>
+      <button
+        type="submit"
+        class="save-button"
+        [disabled]="submitDisabled"
+      >
+        {{ saving ? 'Processing...' : 'Pay' }}
+      </button>
+    </footer>
+  </form>
+
+  @if (snackbarMessage) {
+    <div class="notification-strip" [class.success]="snackbarType === 'success'" [class.error]="snackbarType === 'error'">
+      {{ snackbarMessage }}
+    </div>
+  }
+</section>

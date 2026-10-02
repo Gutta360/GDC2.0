@@ -1,0 +1,107 @@
+<section class="pharmacy-page">
+  <h1>Pharmacy Payment</h1>
+
+  <form class="pharmacy-form" [formGroup]="form" (ngSubmit)="pay()">
+    <section class="form-section">
+      <h2>Select Patient</h2>
+      <app-treatment-patient-selector
+        (patientChange)="onPatientChange($event)"
+      />
+    </section>
+
+    <section class="form-section">
+      <h2>Medicine Cart</h2>
+
+      @if (pendingItems.length) {
+        <div class="cart-table">
+          <div class="cart-head">
+            <strong>S.No</strong>
+            <strong>Medicine Name</strong>
+            <strong>Quantity</strong>
+            <strong>Price</strong>
+          </div>
+
+          @for (item of pendingItems; track item.prescriptionItemId; let index = $index) {
+            <div class="cart-row" [class.blocked]="item.expired || item.availableQuantity < item.prescribedQuantity">
+              <span>{{ index + 1 }}</span>
+              <span>
+                {{ item.medicineName }}
+                <small>{{ item.sourceType === 'TREATMENT' ? 'Treatment' : 'Follow Up' }} {{ item.sourceId }}</small>
+                @if (item.expired) {
+                  <em>Expired</em>
+                } @else if (item.availableQuantity < item.prescribedQuantity) {
+                  <em>Only {{ item.availableQuantity }} available</em>
+                }
+              </span>
+              <span>{{ item.prescribedQuantity }}</span>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                [value]="prices[item.prescriptionItemId]"
+                (input)="onPriceChange(item.prescriptionItemId, $event)"
+                placeholder="0.00"
+              />
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="empty-state">{{ loading ? 'Loading medicines...' : 'No pending medicines' }}</p>
+      }
+
+      <div class="total-row">
+        <span>Total</span>
+        <strong>{{ totalAmount | number:'1.2-2' }}</strong>
+      </div>
+    </section>
+
+    <section class="inline-section">
+      <h2>Payment Mode</h2>
+      <label>
+        <input type="radio" formControlName="paymentMode" value="CASH" />
+        Cash
+      </label>
+      <label>
+        <input type="radio" formControlName="paymentMode" value="UPI" />
+        UPI
+      </label>
+    </section>
+
+    <section class="form-section">
+      <label for="paymentAmount">Payment Amount</label>
+      <input
+        id="paymentAmount"
+        type="text"
+        [value]="totalAmount | number:'1.2-2'"
+        readonly
+        placeholder="Auto calculated"
+      />
+    </section>
+
+    <section class="form-section">
+      <label for="paymentDetails">Payment Details</label>
+      <textarea
+        id="paymentDetails"
+        formControlName="details"
+        rows="4"
+        placeholder="Txn no / notes"
+      ></textarea>
+    </section>
+
+    <footer class="form-footer">
+      <button
+        type="submit"
+        class="save-button"
+        [disabled]="saving || !pendingItems.length || hasInvalidPrices || hasBlockedItems"
+      >
+        {{ saving ? 'Processing...' : 'Pay' }}
+      </button>
+    </footer>
+  </form>
+
+  @if (snackbarMessage) {
+    <div class="notification-strip" [class.success]="snackbarType === 'success'" [class.error]="snackbarType === 'error'">
+      {{ snackbarMessage }}
+    </div>
+  }
+</section>
