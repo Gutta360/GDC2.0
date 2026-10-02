@@ -1,4 +1,3 @@
-<p>patient-edit works!</p>
 <section class="edit-page">
 
   <header class="page-header">
@@ -55,3 +54,16 @@
   }
 
 </section>
+
+@if (snackbarMessage) {
+  <div
+    class="notification-strip"
+    [class.success]="snackbarType === 'success'"
+    [class.error]="snackbarType === 'error'"
+    role="alert"
+  >
+    <span class="notification-strip-text">
+      {{ snackbarMessage }}
+    </span>
+  </div>
+}

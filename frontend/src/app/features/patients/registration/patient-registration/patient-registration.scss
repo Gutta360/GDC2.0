@@ -27,6 +27,45 @@
   }
 }
 
+.notification-strip {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5000;
+  width: 100vw;
+  max-width: none;
+  min-height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 16px 28px;
+  border-radius: 0;
+  box-shadow: 0 -10px 26px rgba(17, 24, 39, 0.24);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: center;
+  white-space: normal;
+
+  &.success {
+    background: #047857;
+  }
+
+  &.error {
+    background: #dc2626;
+  }
+}
+
+.notification-strip-text {
+  display: block;
+  width: 100%;
+  color: #ffffff;
+  overflow-wrap: anywhere;
+}
+
 
 /* =========================
    Tablet
