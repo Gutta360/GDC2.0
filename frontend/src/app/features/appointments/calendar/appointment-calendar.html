@@ -82,6 +82,19 @@
 
 </section>
 
+@if (snackbarMessage) {
+  <div
+    class="notification-strip"
+    [class.success]="snackbarType === 'success'"
+    [class.error]="snackbarType === 'error'"
+    role="alert"
+  >
+    <span class="notification-strip-text">
+      {{ snackbarMessage }}
+    </span>
+  </div>
+}
+
 @if (selectedDate) {
   <div
     class="dialog-backdrop"
@@ -179,37 +192,78 @@
             <h3>Create Appointment - {{ compactSelectedDateTitle }}</h3>
 
             <div class="patient-search">
-              <label for="patientSearch">Patient *</label>
-              <input
-                id="patientSearch"
-                type="search"
-                placeholder="Search by Patient ID or name"
-                [(ngModel)]="patientSearch"
-                [ngModelOptions]="{ standalone: true }"
-                (ngModelChange)="onPatientSearchChange($event)"
-                (focus)="searchPatients()"
-                autocomplete="off"
-              />
-              <input type="hidden" formControlName="patientId" />
+              <label class="section-label">
+                Patient *
+              </label>
 
-              @if (patientDropdownOpen && patientSearch.trim()) {
-                <div class="search-results">
-                  @for (patient of filteredPatients; track patient.patientId) {
-                    <button
-                      type="button"
-                      (click)="selectPatient(patient)"
-                    >
-                      <strong>{{ patient.patientId }}</strong>
-                      {{ patient.fullName }}
-                      <small>{{ patient.mobile }}</small>
-                    </button>
-                  } @empty {
-                    <div class="search-status">
-                      {{ searchingPatients ? 'Loading patients...' : 'No patients found.' }}
+              <div class="patient-dropdown">
+                <button
+                  type="button"
+                  class="dropdown-trigger"
+                  [class.open]="patientDropdownOpen"
+                  (click)="togglePatientDropdown()"
+                >
+                  <span
+                    class="selected-patient"
+                    [class.placeholder]="!selectedPatientId"
+                  >
+                    {{ selectedPatientLabel }}
+                  </span>
+
+                  <span
+                    class="dropdown-arrow"
+                    [class.open]="patientDropdownOpen"
+                  >
+                    ▾
+                  </span>
+                </button>
+
+                @if (patientDropdownOpen) {
+                  <div class="dropdown-panel">
+                    <div class="search-box">
+                      <span class="search-icon">
+                        &#128269;
+                      </span>
+
+                      <input
+                        id="patientSearch"
+                        type="text"
+                        placeholder="Search by ID / Name"
+                        [ngModel]="patientSearch"
+                        [ngModelOptions]="{ standalone: true }"
+                        (ngModelChange)="onPatientSearchChange($event)"
+                        autocomplete="off"
+                      />
                     </div>
-                  }
-                </div>
-              }
+
+                    <div class="patient-options">
+                      @for (patient of patientSearchResults; track patient.patientId) {
+                        <button
+                          type="button"
+                          class="patient-option"
+                          [class.selected]="patient.patientId === selectedPatientId"
+                          (click)="selectPatient(patient)"
+                        >
+                          <span class="option-id">
+                            {{ patient.patientId }}
+                          </span>
+
+                          <span class="option-name">
+                            {{ patient.firstName }}
+                            {{ patient.lastName }}
+                          </span>
+                        </button>
+                      } @empty {
+                        <div class="empty-search">
+                          {{ searchingPatients ? 'Loading patients...' : 'No patients found.' }}
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <input type="hidden" formControlName="patientId" />
             </div>
 
             <div class="time-type-row">

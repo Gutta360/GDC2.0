@@ -56,6 +56,8 @@ export class AppointmentCalendar implements OnInit {
   saving = false;
   errorMessage = '';
   successMessage = '';
+  snackbarMessage = '';
+  snackbarType: 'success' | 'error' = 'error';
 
   selectedDate: Date | null = null;
   selectedDateIso = '';
@@ -72,6 +74,7 @@ export class AppointmentCalendar implements OnInit {
 
   appointmentForm!: FormGroup;
   busyForm!: FormGroup;
+  private snackbarTimeout: ReturnType<typeof setTimeout> | null = null;
 
   readonly conditionFields = [
     ['hasDiabetes', 'Diabetes'],
@@ -155,6 +158,42 @@ export class AppointmentCalendar implements OnInit {
         year: 'numeric'
       }
     );
+  }
+
+  get selectedPatientId(): string {
+    return this.appointmentForm?.value?.patientId ?? '';
+  }
+
+  get selectedPatientLabel(): string {
+
+    if (!this.selectedPatientId) {
+      return 'Select patient';
+    }
+
+    const selected =
+      this.allPatients.find(patient =>
+        patient.patientId === this.selectedPatientId
+      );
+
+    if (!selected) {
+      return this.selectedPatientId;
+    }
+
+    return this.patientLabel(selected);
+  }
+
+  get patientSearchResults(): PatientSummary[] {
+
+    const query =
+      this.patientSearch
+        .trim()
+        .toLowerCase();
+
+    const patients = query
+      ? this.filteredPatients
+      : this.allPatients;
+
+    return patients.slice(0, 20);
   }
 
   previousMonth(): void {
@@ -261,6 +300,18 @@ export class AppointmentCalendar implements OnInit {
     this.busyOpen = false;
   }
 
+  togglePatientDropdown(): void {
+
+    this.patientDropdownOpen =
+      !this.patientDropdownOpen;
+
+    if (this.patientDropdownOpen) {
+      this.patientSearch = '';
+      this.filteredPatients = [];
+      this.ensurePatientsLoaded();
+    }
+  }
+
   onPatientSearchChange(
     value: string
   ): void {
@@ -276,7 +327,6 @@ export class AppointmentCalendar implements OnInit {
         .trim()
         .toLowerCase();
 
-    this.patientDropdownOpen = true;
     this.ensurePatientsLoaded();
 
     const selectedPatientId =
@@ -297,6 +347,7 @@ export class AppointmentCalendar implements OnInit {
 
     if (!query) {
       this.filteredPatients = [];
+      this.cdr.detectChanges();
       return;
     }
 
@@ -332,6 +383,7 @@ export class AppointmentCalendar implements OnInit {
 
     this.filteredPatients = [];
     this.patientDropdownOpen = false;
+    this.patientSearch = '';
     this.cdr.detectChanges();
   }
 
@@ -350,6 +402,10 @@ export class AppointmentCalendar implements OnInit {
 
     if (this.appointmentForm.invalid || !this.selectedDateIso || this.saving) {
       this.appointmentForm.markAllAsTouched();
+      this.showSnackbar(
+        'Please select a patient, choose a time, and complete the required fields.',
+        'error'
+      );
       return;
     }
 
@@ -403,13 +459,29 @@ export class AppointmentCalendar implements OnInit {
       }))
       .subscribe({
         next: () => {
-          this.successMessage = 'Appointment created.';
+          const bookedMessage =
+            this.appointmentBookedMessage(
+              request.appointmentDate,
+              request.appointmentTime
+            );
+
+          this.successMessage = bookedMessage;
+          this.showSnackbar(
+            bookedMessage,
+            'success'
+          );
           this.createOpen = false;
           this.refreshCurrentViews();
         },
         error: error => {
-          this.errorMessage =
-            error?.error?.message ?? 'Could not create appointment.';
+          const message =
+            this.extractErrorMessage(
+              error,
+              'Could not create appointment.'
+            );
+
+          this.errorMessage = message;
+          this.showSnackbar(message, 'error');
           this.loadAvailability();
         }
       });
@@ -419,6 +491,10 @@ export class AppointmentCalendar implements OnInit {
 
     if (this.busyForm.invalid || !this.selectedDateIso || this.saving) {
       this.busyForm.markAllAsTouched();
+      this.showSnackbar(
+        'Please choose a time before saving doctor busy hours.',
+        'error'
+      );
       return;
     }
 
@@ -439,12 +515,22 @@ export class AppointmentCalendar implements OnInit {
       .subscribe({
         next: () => {
           this.successMessage = 'Doctor busy time saved.';
+          this.showSnackbar(
+            'Doctor busy time saved.',
+            'success'
+          );
           this.busyOpen = false;
           this.refreshCurrentViews();
         },
         error: error => {
-          this.errorMessage =
-            error?.error?.message ?? 'Could not save busy time.';
+          const message =
+            this.extractErrorMessage(
+              error,
+              'Could not save busy time.'
+            );
+
+          this.errorMessage = message;
+          this.showSnackbar(message, 'error');
           this.loadAvailability();
         }
       });
@@ -718,6 +804,79 @@ export class AppointmentCalendar implements OnInit {
     if (!this.allPatients.length && !this.searchingPatients) {
       this.loadPatients();
     }
+  }
+
+  private showSnackbar(
+    message: string,
+    type: 'success' | 'error'
+  ): void {
+
+    this.snackbarMessage = message;
+    this.snackbarType = type;
+
+    if (this.snackbarTimeout) {
+      clearTimeout(this.snackbarTimeout);
+    }
+
+    this.snackbarTimeout = setTimeout(() => {
+      this.snackbarMessage = '';
+      this.snackbarTimeout = null;
+      this.cdr.detectChanges();
+    }, 5000);
+
+    this.cdr.detectChanges();
+  }
+
+  private extractErrorMessage(
+    error: {
+      error?: {
+        message?: string;
+        fieldErrors?: Record<string, string>;
+      };
+    },
+    fallback: string
+  ): string {
+
+    const fieldErrors =
+      error?.error?.fieldErrors;
+
+    if (fieldErrors && Object.keys(fieldErrors).length) {
+      return Object.values(fieldErrors).join(' ');
+    }
+
+    return error?.error?.message ?? fallback;
+  }
+
+  private appointmentBookedMessage(
+    dateIso: string,
+    time: string
+  ): string {
+
+    const [year, month, day] =
+      dateIso.split('-').map(Number);
+
+    const date =
+      new Date(
+        year,
+        month - 1,
+        day
+      );
+
+    const formattedDate =
+      date.toLocaleDateString(
+        'en-GB',
+        {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        }
+      );
+
+    return (
+      'Appointment is scheduled at ' +
+      `${formattedDate} at ${this.formatTime(time)} successfully`
+    );
   }
 
   private buildCalendarCells(): CalendarCell[] {
