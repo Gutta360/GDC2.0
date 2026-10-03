@@ -11,16 +11,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PharmacyMigrationAndRepositoryTest {
 
     @Test
-    void v4SyncsMedicineSequenceFromExistingMedicineIds() throws IOException {
-        String migration = Files.readString(Path.of("src/main/resources/db/migration/V4__create_pharmacy_module.sql"));
+    void v6CreatesMedicineFoundationAndV7SyncsMedicineSequence() throws IOException {
+        String foundationMigration = Files.readString(Path.of(
+                "src/main/resources/db/migration/V6__create_treatment_pharmacy_payment_tables.sql"
+        ));
+        String alignmentMigration = Files.readString(Path.of(
+                "src/main/resources/db/migration/V7__create_treatment_module.sql"
+        ));
 
-        assertThat(migration).contains("CREATE SEQUENCE IF NOT EXISTS medicine_number_seq");
-        assertThat(migration).contains("START WITH 1");
-        assertThat(migration).doesNotContain("START WITH 4");
-        assertThat(migration).contains("SELECT setval(");
-        assertThat(migration).contains("MAX(SUBSTRING(medicine_id FROM 3)::INTEGER) + 1");
-        assertThat(migration).contains("WHERE medicine_id ~ '^M-[0-9]{5}$'");
-        assertThat(migration).contains("false");
+        assertThat(foundationMigration).contains("CREATE SEQUENCE IF NOT EXISTS medicine_number_seq");
+        assertThat(foundationMigration).contains("CREATE TABLE medicines");
+        assertThat(foundationMigration).contains("expiry_date DATE NOT NULL");
+        assertThat(foundationMigration).contains("START WITH 1");
+        assertThat(foundationMigration).doesNotContain("START WITH 4");
+        assertThat(alignmentMigration).contains("SELECT setval(");
+        assertThat(alignmentMigration).contains("MAX(SUBSTRING(medicine_id FROM 3)::BIGINT) + 1");
+        assertThat(alignmentMigration).contains("WHERE medicine_id ~ '^M-[0-9]{5}$'");
+        assertThat(alignmentMigration).contains("false");
     }
 
     @Test

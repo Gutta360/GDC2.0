@@ -24,12 +24,28 @@ class TreatmentValidationAndSchemaTest {
 
     @Test
     void toothNumberMigrationColumnsMatchEntityIntegerFields() throws Exception {
-        String migration = Files.readString(Path.of("src/main/resources/db/migration/V3__create_treatment_module.sql"));
+        String migration = Files.readString(Path.of("src/main/resources/db/migration/V6__create_treatment_pharmacy_payment_tables.sql"));
+        String alignmentMigration = Files.readString(Path.of("src/main/resources/db/migration/V7__create_treatment_module.sql"));
 
         assertThat(migration).contains("tooth_number INTEGER NOT NULL");
         assertThat(migration).doesNotContain("tooth_number SMALLINT");
+        assertThat(alignmentMigration).contains("chk_clinical_problem_teeth_fdi");
+        assertThat(alignmentMigration).contains("chk_root_canal_lengths_fdi");
         assertThat(fieldType(ClinicalProblemTooth.class, "toothNumber")).isEqualTo(Integer.class);
         assertThat(fieldType(RootCanalLength.class, "toothNumber")).isEqualTo(Integer.class);
+    }
+
+    @Test
+    void v7AddsTreatmentServiceDatabaseInvariants() throws Exception {
+        String migration = Files.readString(Path.of("src/main/resources/db/migration/V7__create_treatment_module.sql"));
+
+        assertThat(migration).contains("uk_clinical_problem_teeth_problem_tooth");
+        assertThat(migration).contains("uk_root_canal_lengths_problem_tooth_canal");
+        assertThat(migration).contains("chk_clinical_problems_impaction_required");
+        assertThat(migration).contains("chk_clinical_scans_file_size_positive");
+        assertThat(migration).contains("chk_clinical_scans_content_type");
+        assertThat(migration).contains("chk_pharmacy_payment_items_full_fulfilment");
+        assertThat(migration).contains("chk_medicine_stock_movements_quantity_delta");
     }
 
     @Test
