@@ -4,6 +4,8 @@ import com.gdc.backend.treatment.entity.ClinicalScan;
 import com.gdc.backend.treatment.exception.TreatmentValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -100,6 +103,29 @@ public class ScanStorageService {
             Files.deleteIfExists(target);
         } catch (IOException exception) {
             LOGGER.warn("Failed to delete stored scan file {}", scan.getStoredFilename(), exception);
+        }
+    }
+
+    public Resource load(ClinicalScan scan) {
+        if (scan == null || scan.getStoredFilename() == null || scan.getStoredFilename().isBlank()) {
+            throw new TreatmentValidationException("Invalid scan file");
+        }
+
+        try {
+            Path target = storageRoot.resolve(scan.getStoredFilename()).normalize();
+
+            if (!target.startsWith(storageRoot)) {
+                throw new TreatmentValidationException("Invalid scan filename");
+            }
+
+            Resource resource = new UrlResource(target.toUri());
+            if (!resource.exists() || !resource.isReadable()) {
+                throw new TreatmentValidationException("Scan file is not available");
+            }
+
+            return resource;
+        } catch (MalformedURLException exception) {
+            throw new TreatmentValidationException("Could not read scan file");
         }
     }
 

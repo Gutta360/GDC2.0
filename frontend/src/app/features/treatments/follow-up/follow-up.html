@@ -54,6 +54,24 @@
               }
             </p>
           }
+
+          @if (context?.latestTreatment?.scans?.length) {
+            <div class="history-scans">
+              @for (scan of context?.latestTreatment?.scans; track scan.id) {
+                <a
+                  [href]="scanImageUrl(scan)"
+                  target="_blank"
+                  rel="noopener"
+                  [attr.aria-label]="'Open scan ' + scan.originalFilename"
+                >
+                  <img
+                    [src]="scanImageUrl(scan)"
+                    [alt]="scan.originalFilename"
+                  />
+                </a>
+              }
+            </div>
+          }
         </div>
       </section>
     }
@@ -70,6 +88,23 @@
               <strong>{{ followUp.followUpDate | date:'dd-MMM-yyyy' }}</strong>
               @if (followUp.doctorNotes) {
                 <span>{{ followUp.doctorNotes }}</span>
+              }
+              @if (followUp.scans.length) {
+                <div class="history-scans">
+                  @for (scan of followUp.scans; track scan.id) {
+                    <a
+                      [href]="scanImageUrl(scan)"
+                      target="_blank"
+                      rel="noopener"
+                      [attr.aria-label]="'Open scan ' + scan.originalFilename"
+                    >
+                      <img
+                        [src]="scanImageUrl(scan)"
+                        [alt]="scan.originalFilename"
+                      />
+                    </a>
+                  }
+                </div>
               }
             </article>
           }

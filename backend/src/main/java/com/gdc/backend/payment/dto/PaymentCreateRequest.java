@@ -1,9 +1,12 @@
 package com.gdc.backend.payment.dto;
 
 import com.gdc.backend.payment.entity.PaymentMode;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.math.BigDecimal;
 
 public record PaymentCreateRequest(
         @NotBlank(message = "Patient ID is required")
@@ -11,6 +14,10 @@ public record PaymentCreateRequest(
 
         @NotBlank(message = "Treatment ID is required")
         String treatmentId,
+
+        @NotNull(message = "Payment amount is required")
+        @DecimalMin(value = "0.00", message = "Payment amount cannot be negative")
+        BigDecimal amount,
 
         @NotNull(message = "Payment mode is required")
         PaymentMode paymentMode,

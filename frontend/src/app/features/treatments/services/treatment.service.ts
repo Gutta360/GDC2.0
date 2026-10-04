@@ -63,6 +63,10 @@ export class TreatmentService {
     );
   }
 
+  scanImageUrl(scanId: number): string {
+    return `${this.treatmentApiUrl}/scans/${scanId}`;
+  }
+
   createFollowUp(
     request: FollowUpCreateRequest,
     scans: File[]

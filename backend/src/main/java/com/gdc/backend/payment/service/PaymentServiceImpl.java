@@ -87,8 +87,12 @@ public class PaymentServiceImpl implements PaymentService {
             throw new PaymentConflictException("This treatment has already been paid. Refresh and try again.");
         }
 
-        BigDecimal amount = treatment.getTreatmentAmount().setScale(2, RoundingMode.HALF_UP);
-        validateAmount(amount);
+        if (request.amount() == null) {
+            throw new PaymentValidationException("Payment amount is required");
+        }
+
+        BigDecimal amount = request.amount().setScale(2, RoundingMode.HALF_UP);
+        validateAmount(amount, treatment.getTreatmentAmount());
 
         TreatmentPayment payment = new TreatmentPayment();
         payment.setPaymentId(generatePaymentId());
@@ -138,13 +142,18 @@ public class PaymentServiceImpl implements PaymentService {
         return PAYMENT_ID_PREFIX + "%05d".formatted(paymentRepository.getNextTreatmentPaymentNumber());
     }
 
-    private void validateAmount(BigDecimal amount) {
+    private void validateAmount(BigDecimal amount, BigDecimal outstandingAmount) {
         if (amount.signum() < 0) {
-            throw new PaymentValidationException("Treatment amount cannot be negative");
+            throw new PaymentValidationException("Payment amount cannot be negative");
         }
 
         if (amount.compareTo(MAX_NUMERIC_10_2) > 0) {
-            throw new PaymentValidationException("Treatment amount exceeds the maximum supported amount");
+            throw new PaymentValidationException("Payment amount exceeds the maximum supported amount");
+        }
+
+        BigDecimal normalizedOutstanding = outstandingAmount.setScale(2, RoundingMode.HALF_UP);
+        if (amount.compareTo(normalizedOutstanding) > 0) {
+            throw new PaymentValidationException("Payment amount cannot exceed outstanding amount");
         }
     }
 

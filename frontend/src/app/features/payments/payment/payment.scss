@@ -47,6 +47,8 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
+    margin: 0;
+    font-weight: 800;
   }
 }
 
@@ -65,6 +67,22 @@ textarea {
 input {
   min-height: 54px;
   padding: 0 16px;
+}
+
+input[type='radio'] {
+  appearance: auto;
+  -webkit-appearance: radio;
+  width: 20px;
+  height: 20px;
+  min-height: 20px;
+  flex: 0 0 20px;
+  padding: 0;
+  margin: 0;
+  border: initial;
+  border-radius: 50%;
+  background: initial;
+  box-shadow: none;
+  accent-color: #111827;
 }
 
 textarea {
@@ -118,6 +136,13 @@ textarea {
 .empty-state {
   margin: 0 0 12px;
   color: #98a2b3;
+}
+
+.validation-message {
+  margin: 8px 0 0;
+  color: #b42318;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .form-footer {

@@ -24,6 +24,7 @@ import {
   FollowUpCreateRequest,
   PatientHealthSnapshot,
   PrescriptionItem,
+  ScanResponse,
   problemTypeLabels
 } from '../models/treatment.model';
 import { TreatmentService } from '../services/treatment.service';
@@ -149,6 +150,10 @@ export class FollowUp implements OnDestroy {
 
     this.editingProblem = null;
     this.editingProblemIndex = null;
+  }
+
+  scanImageUrl(scan: ScanResponse): string {
+    return this.treatmentService.scanImageUrl(scan.id);
   }
 
   removeProblem(index: number): void {

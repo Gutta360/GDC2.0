@@ -2,9 +2,16 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
+  OnDestroy,
   Output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+interface ScanPreview {
+  file: File;
+  url: string;
+}
 
 @Component({
   selector: 'app-scan-uploader',
@@ -15,13 +22,22 @@ import { CommonModule } from '@angular/common';
   templateUrl: './scan-uploader.html',
   styleUrl: './scan-uploader.scss'
 })
-export class ScanUploader {
+export class ScanUploader implements OnChanges, OnDestroy {
 
   @Input() scans: File[] = [];
 
   @Output() scansChange = new EventEmitter<File[]>();
 
   errorMessage = '';
+  previews: ScanPreview[] = [];
+
+  ngOnChanges(): void {
+    this.syncPreviews();
+  }
+
+  ngOnDestroy(): void {
+    this.revokePreviews();
+  }
 
   onFilesSelected(event: Event): void {
     this.errorMessage = '';
@@ -49,12 +65,29 @@ export class ScanUploader {
       ...this.scans,
       ...validFiles
     ];
+    this.syncPreviews();
     this.scansChange.emit(this.scans);
     input.value = '';
   }
 
   remove(index: number): void {
     this.scans = this.scans.filter((_, itemIndex) => itemIndex !== index);
+    this.syncPreviews();
     this.scansChange.emit(this.scans);
+  }
+
+  private syncPreviews(): void {
+    this.revokePreviews();
+    this.previews = this.scans.map(file => ({
+      file,
+      url: URL.createObjectURL(file)
+    }));
+  }
+
+  private revokePreviews(): void {
+    for (const preview of this.previews) {
+      URL.revokeObjectURL(preview.url);
+    }
+    this.previews = [];
   }
 }

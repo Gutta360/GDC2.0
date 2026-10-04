@@ -89,9 +89,14 @@
 }
 
 .badge {
+  min-width: 28px;
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: fit-content;
   max-width: 100%;
-  padding: 4px 8px;
+  padding: 0 8px;
   border-radius: 999px;
   color: #ffffff;
   font-size: 12px;
@@ -368,8 +373,26 @@ textarea {
 input[type='checkbox'],
 input[type='radio'] {
   width: 21px;
+  height: 21px;
+  min-width: 21px;
   min-height: 21px;
+  flex: 0 0 21px;
+  padding: 0;
+  margin: 0;
+  border: initial;
+  background: initial;
+  box-shadow: none;
   accent-color: #111827;
+}
+
+input[type='radio'] {
+  appearance: auto;
+  -webkit-appearance: radio;
+}
+
+input[type='checkbox'] {
+  appearance: auto;
+  -webkit-appearance: checkbox;
 }
 
 .range-label,

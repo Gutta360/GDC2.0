@@ -53,20 +53,20 @@
 
         <span class="badges">
           @if ((cell.counts?.newAppointments ?? 0) > 0) {
-            <span class="badge new">
-              {{ cell.counts?.newAppointments }} New
+            <span class="badge new" aria-label="New appointments">
+              {{ cell.counts?.newAppointments }}
             </span>
           }
 
           @if ((cell.counts?.followUpAppointments ?? 0) > 0) {
-            <span class="badge follow">
-              {{ cell.counts?.followUpAppointments }} Follow-up
+            <span class="badge follow" aria-label="Follow-up appointments">
+              {{ cell.counts?.followUpAppointments }}
             </span>
           }
 
           @if ((cell.counts?.doctorBusySlots ?? 0) > 0) {
-            <span class="badge busy">
-              {{ cell.counts?.doctorBusySlots }} Busy
+            <span class="badge busy" aria-label="Doctor busy slots">
+              {{ cell.counts?.doctorBusySlots }}
             </span>
           }
         </span>

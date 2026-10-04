@@ -52,13 +52,13 @@ class PaymentServiceImplTest {
     }
 
     @Test
-    void createPaymentCopiesTreatmentAmountAndGeneratesTreatmentPaymentId() {
-        var response = service.createPayment(request(PaymentMode.CASH, "  paid cash  "));
+    void createPaymentUsesEnteredAmountAndGeneratesTreatmentPaymentId() {
+        var response = service.createPayment(request(new BigDecimal("800.00"), PaymentMode.CASH, "  paid cash  "));
 
         assertThat(response.paymentId()).isEqualTo("TPAY-00001");
         assertThat(response.patientId()).isEqualTo("P-00001");
         assertThat(response.treatmentId()).isEqualTo("T-00001");
-        assertThat(response.amount()).isEqualByComparingTo("1250.50");
+        assertThat(response.amount()).isEqualByComparingTo("800.00");
         assertThat(response.paymentMode()).isEqualTo(PaymentMode.CASH);
         assertThat(response.details()).isEqualTo("paid cash");
         assertThat(response.paidAt()).isEqualTo(Instant.parse("2026-10-02T00:00:00Z"));
@@ -118,13 +118,26 @@ class PaymentServiceImplTest {
     }
 
     @Test
-    void createPaymentRejectsMoneyOverflow() throws Exception {
-        treatment = treatment("T-00001", patient, new BigDecimal("100000000.00"));
-        service = service(false, Optional.of(treatment), List.of(), false, Optional.of(patient));
-
-        assertThatThrownBy(() -> service.createPayment(request(PaymentMode.CASH, null)))
+    void createPaymentRejectsMoneyOverflow() {
+        assertThatThrownBy(() -> service.createPayment(request(new BigDecimal("100000000.00"), PaymentMode.CASH, null)))
                 .isInstanceOf(PaymentValidationException.class)
                 .hasMessageContaining("maximum supported");
+    }
+
+    @Test
+    void createPaymentRejectsAmountAboveOutstanding() {
+        service = service(false, Optional.of(treatment), List.of(), false, Optional.of(patient));
+
+        assertThatThrownBy(() -> service.createPayment(request(new BigDecimal("1250.51"), PaymentMode.CASH, null)))
+                .isInstanceOf(PaymentValidationException.class)
+                .hasMessageContaining("outstanding amount");
+    }
+
+    @Test
+    void createPaymentRejectsMissingAmount() {
+        assertThatThrownBy(() -> service.createPayment(request(null, PaymentMode.CASH, null)))
+                .isInstanceOf(PaymentValidationException.class)
+                .hasMessageContaining("Payment amount is required");
     }
 
     @Test
@@ -226,7 +239,11 @@ class PaymentServiceImplTest {
     }
 
     private PaymentCreateRequest request(PaymentMode paymentMode, String details) {
-        return new PaymentCreateRequest("P-00001", "T-00001", paymentMode, details);
+        return request(new BigDecimal("1250.50"), paymentMode, details);
+    }
+
+    private PaymentCreateRequest request(BigDecimal amount, PaymentMode paymentMode, String details) {
+        return new PaymentCreateRequest("P-00001", "T-00001", amount, paymentMode, details);
     }
 
     private Patient patient(String patientId) {

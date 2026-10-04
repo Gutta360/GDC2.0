@@ -58,11 +58,15 @@
       <label for="paymentAmount">Payment Amount</label>
       <input
         id="paymentAmount"
-        type="text"
-        [value]="payableAmount | number:'1.2-2'"
-        readonly
-        placeholder="Auto calculated"
+        type="number"
+        min="0"
+        step="0.01"
+        formControlName="paymentAmount"
+        placeholder="Enter payment amount"
       />
+      @if (form.controls.paymentAmount.touched && form.controls.paymentAmount.invalid) {
+        <p class="validation-message">Enter a valid payment amount.</p>
+      }
     </section>
 
     <section class="form-section">

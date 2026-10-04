@@ -13,6 +13,7 @@ export interface OutstandingTreatmentPayment {
 export interface PaymentCreateRequest {
   patientId: string;
   treatmentId: string;
+  amount: number;
   paymentMode: PaymentMode;
   details: string | null;
 }

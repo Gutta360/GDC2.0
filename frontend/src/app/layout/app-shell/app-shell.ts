@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import {
   RouterLink,
   RouterLinkActive,
-  RouterOutlet
+  RouterOutlet,
+  Router
 } from '@angular/router';
 
 @Component({
@@ -16,4 +17,11 @@ import {
   styleUrl: './app-shell.scss'
 })
 export class AppShell {
+  constructor(
+    private router: Router
+  ) {}
+
+  logout(): void {
+    this.router.navigate(['/login']);
+  }
 }

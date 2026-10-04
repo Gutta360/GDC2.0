@@ -3,8 +3,14 @@ package com.gdc.backend.treatment.controller;
 import com.gdc.backend.treatment.dto.FollowUpContextResponse;
 import com.gdc.backend.treatment.dto.TreatmentCreateRequest;
 import com.gdc.backend.treatment.dto.TreatmentResponse;
+import com.gdc.backend.treatment.entity.ClinicalScan;
+import com.gdc.backend.treatment.exception.ScanNotFoundException;
+import com.gdc.backend.treatment.repository.ClinicalScanRepository;
+import com.gdc.backend.treatment.service.ScanStorageService;
 import com.gdc.backend.treatment.service.TreatmentService;
 import jakarta.validation.Valid;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +30,17 @@ import java.util.List;
 public class TreatmentController {
 
     private final TreatmentService treatmentService;
+    private final ClinicalScanRepository scanRepository;
+    private final ScanStorageService scanStorageService;
 
-    public TreatmentController(TreatmentService treatmentService) {
+    public TreatmentController(
+            TreatmentService treatmentService,
+            ClinicalScanRepository scanRepository,
+            ScanStorageService scanStorageService
+    ) {
         this.treatmentService = treatmentService;
+        this.scanRepository = scanRepository;
+        this.scanStorageService = scanStorageService;
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -67,5 +81,23 @@ public class TreatmentController {
             @PathVariable String patientId
     ) {
         return ResponseEntity.ok(treatmentService.getFollowUpContext(patientId));
+    }
+
+    @GetMapping("/scans/{scanId}")
+    public ResponseEntity<Resource> getScan(
+            @PathVariable Long scanId
+    ) {
+        ClinicalScan scan = scanRepository
+                .findById(scanId)
+                .orElseThrow(() -> new ScanNotFoundException(scanId));
+
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.parseMediaType(scan.getContentType()))
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=\"" + scan.getOriginalFilename().replace("\"", "") + "\""
+                )
+                .body(scanStorageService.load(scan));
     }
 }

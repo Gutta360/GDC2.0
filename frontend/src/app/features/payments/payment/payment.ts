@@ -49,6 +49,7 @@ export class Payment implements OnDestroy {
   form = this.fb.group({
     patientId: ['', Validators.required],
     treatmentId: ['', Validators.required],
+    paymentAmount: [0, [Validators.required, Validators.min(0)]],
     paymentMode: ['CASH' as PaymentMode, Validators.required],
     details: ['', Validators.maxLength(1000)]
   });
@@ -88,7 +89,8 @@ export class Payment implements OnDestroy {
   onPatientChange(patientId: string | null): void {
     this.form.patchValue({
       patientId: patientId ?? '',
-      treatmentId: ''
+      treatmentId: '',
+      paymentAmount: 0
     });
     this.outstandingTreatments = [];
 
@@ -108,7 +110,7 @@ export class Payment implements OnDestroy {
         next: treatments => {
           this.outstandingTreatments = treatments;
           if (treatments.length === 1) {
-            this.form.patchValue({ treatmentId: treatments[0].treatmentId });
+            this.selectTreatment(treatments[0]);
           }
         },
         error: error => {
@@ -118,7 +120,10 @@ export class Payment implements OnDestroy {
   }
 
   selectTreatment(treatment: OutstandingTreatmentPayment): void {
-    this.form.patchValue({ treatmentId: treatment.treatmentId });
+    this.form.patchValue({
+      treatmentId: treatment.treatmentId,
+      paymentAmount: treatment.outstandingAmount
+    });
   }
 
   pay(): void {
@@ -131,6 +136,7 @@ export class Payment implements OnDestroy {
     const request: PaymentCreateRequest = {
       patientId: value.patientId ?? '',
       treatmentId: value.treatmentId ?? '',
+      amount: Number(value.paymentAmount ?? 0),
       paymentMode: value.paymentMode as PaymentMode,
       details: value.details?.trim() || null
     };
@@ -149,6 +155,7 @@ export class Payment implements OnDestroy {
           const patientId = request.patientId;
           this.form.patchValue({
             treatmentId: '',
+            paymentAmount: 0,
             details: ''
           });
           this.reloadOutstanding(patientId);
@@ -163,6 +170,7 @@ export class Payment implements OnDestroy {
     this.form.reset({
       patientId: '',
       treatmentId: '',
+      paymentAmount: 0,
       paymentMode: 'CASH',
       details: ''
     });
@@ -187,7 +195,7 @@ export class Payment implements OnDestroy {
         next: treatments => {
           this.outstandingTreatments = treatments;
           if (treatments.length === 1) {
-            this.form.patchValue({ treatmentId: treatments[0].treatmentId });
+            this.selectTreatment(treatments[0]);
           }
         },
         error: error => {

@@ -14,6 +14,7 @@ import com.gdc.backend.pharmacy.exception.PharmacyConflictException;
 import com.gdc.backend.pharmacy.exception.PharmacyNotFoundException;
 import com.gdc.backend.pharmacy.exception.PharmacyValidationException;
 import com.gdc.backend.treatment.exception.FollowUpNotFoundException;
+import com.gdc.backend.treatment.exception.ScanNotFoundException;
 import com.gdc.backend.treatment.exception.TreatmentNotFoundException;
 import com.gdc.backend.treatment.exception.TreatmentValidationException;
 import jakarta.persistence.LockTimeoutException;
@@ -76,6 +77,7 @@ public class GlobalExceptionHandler {
             DoctorBusyNotFoundException.class,
             TreatmentNotFoundException.class,
             FollowUpNotFoundException.class,
+            ScanNotFoundException.class,
             PharmacyNotFoundException.class,
             PaymentNotFoundException.class
     })
