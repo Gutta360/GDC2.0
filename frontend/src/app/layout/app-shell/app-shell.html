@@ -6,198 +6,156 @@
       GDC
     </div>
 
-    <nav class="main-navigation">
+    <nav class="main-navigation" aria-label="Main navigation">
 
-      <!-- Home -->
       <a
-  routerLink="/home"
-  routerLinkActive="active"
-  class="nav-item home-link"
-  aria-label="Home"
->
-  <svg
-    class="home-icon"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <path
-      d="M3 10.8L12 3l9 7.8"
-    />
-    <path
-      d="M5.5 9.5V21h13V9.5"
-    />
-    <path
-      d="M9.5 21v-6.5h5V21"
-    />
-  </svg>
-</a>
+        routerLink="/home"
+        routerLinkActive="active"
+        class="nav-item home-link"
+        aria-label="Home"
+        (click)="closeMenu()"
+      >
+        <svg
+          class="home-icon"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path d="M3 10.8L12 3l9 7.8" />
+          <path d="M5.5 9.5V21h13V9.5" />
+          <path d="M9.5 21v-6.5h5V21" />
+        </svg>
+      </a>
 
-
-      <!-- Patient Dropdown -->
-      <div class="nav-dropdown">
-
-        <a
-          routerLink="/patients"
-          routerLinkActive="active"
-          class="nav-item"
+      <div class="nav-dropdown" [class.open]="isMenuOpen('patients')">
+        <button
+          type="button"
+          class="nav-item nav-toggle"
+          [class.active]="isSectionActive(['/patients'])"
+          [attr.aria-expanded]="isMenuOpen('patients')"
+          aria-controls="patients-menu"
+          (click)="toggleMenu('patients')"
         >
           Patient
-        </a>
+        </button>
 
-        <div class="dropdown-menu">
-
-          <a
-            routerLink="/patients/registration"
-            routerLinkActive="active"
-            class="dropdown-item"
-          >
+        <div id="patients-menu" class="dropdown-menu">
+          <a routerLink="/patients/registration" routerLinkActive="active" class="dropdown-item" (click)="closeMenu()">
             Registration
           </a>
-
-          <a
-            routerLink="/patients/details"
-            routerLinkActive="active"
-            class="dropdown-item"
-          >
+          <a routerLink="/patients/details" routerLinkActive="active" class="dropdown-item" (click)="closeMenu()">
             Patient Details
           </a>
-
+          <a routerLink="/patients/summary" routerLinkActive="active" class="dropdown-item" (click)="closeMenu()">
+            Patient Summary
+          </a>
         </div>
-
       </div>
 
-
-      <!-- Appointment Dropdown -->
-      <div class="nav-dropdown">
-
-        <a
-          routerLink="/appointments/calendar"
-          routerLinkActive="active"
-          class="nav-item"
+      <div class="nav-dropdown" [class.open]="isMenuOpen('appointments')">
+        <button
+          type="button"
+          class="nav-item nav-toggle"
+          [class.active]="isSectionActive(['/appointments'])"
+          [attr.aria-expanded]="isMenuOpen('appointments')"
+          aria-controls="appointments-menu"
+          (click)="toggleMenu('appointments')"
         >
           Appointment
-        </a>
+        </button>
 
-        <div class="dropdown-menu">
-
-          <a
-            routerLink="/appointments/calendar"
-            routerLinkActive="active"
-            class="dropdown-item"
-          >
+        <div id="appointments-menu" class="dropdown-menu">
+          <a routerLink="/appointments/calendar" routerLinkActive="active" class="dropdown-item" (click)="closeMenu()">
             Calendar
           </a>
-
         </div>
-
       </div>
 
-
-      <!-- Treatment Dropdown -->
-      <div class="nav-dropdown">
-
-        <a
-          routerLink="/treatments"
-          routerLinkActive="active"
-          class="nav-item"
+      <div class="nav-dropdown" [class.open]="isMenuOpen('treatments')">
+        <button
+          type="button"
+          class="nav-item nav-toggle"
+          [class.active]="isSectionActive(['/treatments'])"
+          [attr.aria-expanded]="isMenuOpen('treatments')"
+          aria-controls="treatments-menu"
+          (click)="toggleMenu('treatments')"
         >
           Treatment
-        </a>
+        </button>
 
-        <div class="dropdown-menu">
-
+        <div id="treatments-menu" class="dropdown-menu">
           <a
             routerLink="/treatments"
             routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
             class="dropdown-item"
+            (click)="closeMenu()"
           >
             Treatment
           </a>
-
-          <a
-            routerLink="/treatments/follow-up"
-            routerLinkActive="active"
-            class="dropdown-item"
-          >
+          <a routerLink="/treatments/follow-up" routerLinkActive="active" class="dropdown-item" (click)="closeMenu()">
             Follow Up
           </a>
-
         </div>
-
       </div>
 
-
-      <!-- Payment Dropdown -->
-      <div class="nav-dropdown">
-
-        <a
-          routerLink="/payments"
-          routerLinkActive="active"
-          class="nav-item"
+      <div class="nav-dropdown" [class.open]="isMenuOpen('payments')">
+        <button
+          type="button"
+          class="nav-item nav-toggle"
+          [class.active]="isSectionActive(['/payments'])"
+          [attr.aria-expanded]="isMenuOpen('payments')"
+          aria-controls="payments-menu"
+          (click)="toggleMenu('payments')"
         >
           Payment
-        </a>
+        </button>
 
-        <div class="dropdown-menu">
-
+        <div id="payments-menu" class="dropdown-menu">
           <a
             routerLink="/payments"
             routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
             class="dropdown-item"
+            (click)="closeMenu()"
           >
             Payment
           </a>
-
-          <a
-            routerLink="/payments/history"
-            routerLinkActive="active"
-            class="dropdown-item"
-          >
+          <a routerLink="/payments/history" routerLinkActive="active" class="dropdown-item" (click)="closeMenu()">
             History
           </a>
-
         </div>
-
       </div>
 
-
-      <!-- Pharmacy Dropdown -->
-      <div class="nav-dropdown">
-
-        <a
-          routerLink="/pharmacy"
-          routerLinkActive="active"
-          class="nav-item"
+      <div class="nav-dropdown" [class.open]="isMenuOpen('pharmacy')">
+        <button
+          type="button"
+          class="nav-item nav-toggle"
+          [class.active]="isSectionActive(['/pharmacy'])"
+          [attr.aria-expanded]="isMenuOpen('pharmacy')"
+          aria-controls="pharmacy-menu"
+          (click)="toggleMenu('pharmacy')"
         >
           Pharmacy
-        </a>
+        </button>
 
-        <div class="dropdown-menu">
-
+        <div id="pharmacy-menu" class="dropdown-menu">
           <a
             routerLink="/pharmacy"
             routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
             class="dropdown-item"
+            (click)="closeMenu()"
           >
             Pharmacy
           </a>
-
-          <a
-            routerLink="/pharmacy/stock"
-            routerLinkActive="active"
-            class="dropdown-item"
-          >
+          <a routerLink="/pharmacy/stock" routerLinkActive="active" class="dropdown-item" (click)="closeMenu()">
             Stock
           </a>
-
         </div>
-
       </div>
 
     </nav>
 
-
-    <!-- Logout -->
     <button
       type="button"
       class="logout-button"
@@ -209,8 +167,6 @@
 
   </header>
 
-
-  <!-- Routed Page Content -->
   <main class="application-content">
     <router-outlet />
   </main>

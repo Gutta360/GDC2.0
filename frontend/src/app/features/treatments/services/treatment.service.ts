@@ -55,6 +55,24 @@ export class TreatmentService {
     );
   }
 
+  getTreatments(
+    patientId: string
+  ): Observable<TreatmentResponse[]> {
+    return this.http.get<TreatmentResponse[]>(
+      this.treatmentApiUrl,
+      { params: { patientId } }
+    );
+  }
+
+  getFollowUps(
+    patientId: string
+  ): Observable<FollowUpResponse[]> {
+    return this.http.get<FollowUpResponse[]>(
+      this.followUpApiUrl,
+      { params: { patientId } }
+    );
+  }
+
   getFollowUpContext(
     patientId: string
   ): Observable<FollowUpContext> {

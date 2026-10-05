@@ -8,6 +8,7 @@ import { AppShell } from './layout/app-shell/app-shell';
 import { PatientRegistration } from './features/patients/registration/patient-registration/patient-registration';
 import { PatientDetails } from './features/patients/details/patient-details/patient-details';
 import { PatientEdit } from './features/patients/edit/patient-edit/patient-edit';
+import { PatientSummary } from './features/patients/summary/patient-summary/patient-summary';
 import { AppointmentCalendar } from './features/appointments/calendar/appointment-calendar';
 import { Treatment } from './features/treatments/treatment/treatment';
 import { FollowUp } from './features/treatments/follow-up/follow-up';
@@ -54,6 +55,16 @@ export const routes: Routes = [
 
       {
 
+        path: 'patients',
+
+        redirectTo: 'patients/registration',
+
+        pathMatch: 'full'
+
+      },
+
+      {
+
         path: 'patients/registration',
 
         component: PatientRegistration
@@ -65,6 +76,14 @@ export const routes: Routes = [
         path: 'patients/details',
 
         component: PatientDetails
+
+      },
+
+      {
+
+        path: 'patients/summary',
+
+        component: PatientSummary
 
       },
 

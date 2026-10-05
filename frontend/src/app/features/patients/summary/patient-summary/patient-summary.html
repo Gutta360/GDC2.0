@@ -1,0 +1,159 @@
+<section class="patient-summary-page">
+  <h1>Patient Summary</h1>
+
+  <section class="summary-toolbar">
+    <app-treatment-patient-selector
+      (patientChange)="onPatientChange($event)"
+    />
+
+    @if (selectedPatientId && totalAmount > 0) {
+      <div class="payment-progress" aria-label="Treatment payment progress">
+        <div class="payment-progress-labels">
+          <strong>Paid: ₹{{ totalPaid | number:'1.0-0' }}</strong>
+          <strong>Total: ₹{{ totalAmount | number:'1.0-0' }}</strong>
+        </div>
+        <div class="payment-progress-track">
+          <span [style.width]="progressWidth">
+            {{ paidPercent }}%
+          </span>
+        </div>
+      </div>
+    }
+  </section>
+
+  @if (loading) {
+    <p class="loading-state">Loading patient summary...</p>
+  }
+
+  @if (selectedPatientId && !loading) {
+    @if (chiefComplaint) {
+      <article class="summary-card">
+        <header>
+          <strong>Chief Complaint</strong>
+          <span>{{ formatDate(chiefComplaint.treatmentDate) }}</span>
+        </header>
+
+        <div class="summary-row">
+          <strong>Problems</strong>
+          <span>{{ problemsText(chiefComplaint.problems) }}</span>
+        </div>
+        <div class="summary-row">
+          <strong>Type</strong>
+          <span>{{ treatmentTypeLabel(chiefComplaint.treatmentType) }}</span>
+        </div>
+        <div class="summary-row">
+          <strong>Notes</strong>
+          <span>{{ chiefComplaint.doctorNotes || 'No notes' }}</span>
+        </div>
+        <div class="summary-row">
+          <strong>Medicines</strong>
+          <span>{{ medicinesText(chiefComplaint.prescribedMedicines) }}</span>
+        </div>
+        <div class="summary-row">
+          <strong>Scans</strong>
+          @if (chiefComplaint.scans.length) {
+            <div class="scan-list">
+              @for (scan of chiefComplaint.scans; track scan.id) {
+                <a
+                  [href]="scanImageUrl(scan)"
+                  target="_blank"
+                  rel="noopener"
+                  [attr.aria-label]="'Open scan ' + scan.originalFilename"
+                >
+                  <img
+                    [src]="scanImageUrl(scan)"
+                    [alt]="scan.originalFilename"
+                  />
+                </a>
+              }
+            </div>
+          } @else {
+            <span>No scans</span>
+          }
+        </div>
+      </article>
+    } @else {
+      <p class="empty-state">No treatment footprint found for this patient.</p>
+    }
+
+    @if (followUps.length) {
+      <h2>Previous Follow-Ups</h2>
+
+      <div class="follow-up-list">
+        @for (followUp of followUps; track followUp.followUpId) {
+          <article class="summary-card">
+            <header>
+              <strong>Follow Up</strong>
+              <span>{{ formatDate(followUp.followUpDate) }}</span>
+            </header>
+
+            <div class="summary-row">
+              <strong>Notes</strong>
+              <span>{{ followUp.doctorNotes || 'No notes' }}</span>
+            </div>
+            <div class="summary-row">
+              <strong>Medicines</strong>
+              <span>{{ medicinesText(followUp.prescribedMedicines) }}</span>
+            </div>
+            <div class="summary-row">
+              <strong>Scans</strong>
+              @if (followUp.scans.length) {
+                <div class="scan-list">
+                  @for (scan of followUp.scans; track scan.id) {
+                    <a
+                      [href]="scanImageUrl(scan)"
+                      target="_blank"
+                      rel="noopener"
+                      [attr.aria-label]="'Open scan ' + scan.originalFilename"
+                    >
+                      <img
+                        [src]="scanImageUrl(scan)"
+                        [alt]="scan.originalFilename"
+                      />
+                    </a>
+                  }
+                </div>
+              } @else {
+                <span>No scans</span>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+
+    @if (payments.length) {
+      <h2>Payments History</h2>
+
+      <div class="payments-table">
+        <div class="payments-row payments-head">
+          <strong>No</strong>
+          <strong>Details</strong>
+          <strong>Purpose</strong>
+          <strong>Amount</strong>
+          <strong>Mode</strong>
+          <strong>Paid At</strong>
+        </div>
+
+        @for (payment of payments; track payment.id; let index = $index) {
+          <div class="payments-row">
+            <span>{{ index + 1 }}</span>
+            <span>{{ payment.details }}</span>
+            <span>{{ payment.purpose }}</span>
+            <span>₹{{ payment.amount | number:'1.2-2' }}</span>
+            <span>{{ payment.mode }}</span>
+            <span>{{ formatPaidAt(payment.paidAt) }}</span>
+          </div>
+        }
+      </div>
+    }
+  } @else if (!selectedPatientId && !loading) {
+    <p class="empty-state">Select a patient to view footprints across GDC.</p>
+  }
+
+  @if (errorMessage) {
+    <div class="notification-strip error" role="alert">
+      {{ errorMessage }}
+    </div>
+  }
+</section>

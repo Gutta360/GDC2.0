@@ -53,6 +53,7 @@
   display: flex;
   align-items: stretch;
   justify-content: space-around;
+  gap: clamp(6px, 1vw, 18px);
 
   margin-left: 24px;
 }
@@ -86,6 +87,11 @@
     opacity: 1;
   }
 
+  &:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: -8px;
+  }
+
   &.active {
     opacity: 1;
   }
@@ -104,6 +110,12 @@
     background: #ffffff;
     border-radius: 2px;
   }
+}
+
+.nav-toggle {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
 
@@ -190,9 +202,9 @@
 }
 
 
-/* Show Patient menu on hover */
+/* Show active menu after click/tap */
 
-.nav-dropdown:hover .dropdown-menu {
+.nav-dropdown.open .dropdown-menu {
   display: flex;
 }
 
@@ -279,7 +291,7 @@
 .application-content {
   min-height: calc(100vh - 68px);
 
-  padding: 32px;
+  padding: clamp(18px, 2.2vw, 32px);
 
   background: #f7f7f7;
 }
@@ -289,15 +301,15 @@
    Tablet
    ========================= */
 
-@media (max-width: 900px) {
+@media (max-width: 1180px) {
 
   .main-header {
-    padding: 0 16px;
+    padding: 0 14px;
   }
 
   .main-navigation {
-    margin-left: 12px;
-    gap: 8px;
+    margin-left: 14px;
+    gap: 4px;
   }
 
   .nav-item {
@@ -317,7 +329,48 @@
   }
 
   .application-content {
-    padding: 24px;
+    padding: 18px;
+  }
+}
+
+@media (max-width: 860px) {
+
+  .main-header {
+    min-height: auto;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+  }
+
+  .brand {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .main-navigation {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-left: 0;
+  }
+
+  .nav-item {
+    min-height: 44px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .dropdown-menu {
+    left: 0;
+    min-width: 190px;
+  }
+
+  .logout-button {
+    margin-left: auto;
+  }
+
+  .application-content {
+    min-height: calc(100vh - 92px);
   }
 }
 
