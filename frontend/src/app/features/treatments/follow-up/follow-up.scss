@@ -10,8 +10,8 @@
 
   h1 {
     margin: 0 0 54px;
-    font-size: 27px;
-    font-weight: 800;
+    font-size: var(--gdc-text-h3);
+    font-weight: var(--gdc-font-weight-semibold);
   }
 }
 
@@ -38,8 +38,8 @@
   label {
     display: block;
     margin: 0 0 12px;
-    font-size: 17px;
-    font-weight: 800;
+    font-size: var(--gdc-text-h5);
+    font-weight: var(--gdc-font-weight-semibold);
   }
 }
 
@@ -51,8 +51,8 @@ textarea {
   border-radius: 16px;
   background: #f8fafc;
   color: #111827;
-  font: inherit;
-  font-size: 15px;
+  font-family: var(--gdc-font-body);
+  font-size: var(--gdc-text-body);
 }
 
 input {
@@ -73,8 +73,8 @@ textarea {
   padding: 0 26px;
   background: #111827;
   color: #ffffff;
-  font: inherit;
-  font-weight: 800;
+  font-family: var(--gdc-font-body);
+  font-weight: var(--gdc-font-weight-semibold);
   cursor: pointer;
 }
 
@@ -122,7 +122,7 @@ textarea {
 
     span {
       color: rgba(255, 255, 255, 0.76);
-      font-size: 12px;
+      font-size: var(--gdc-text-caption);
     }
   }
 }
@@ -192,8 +192,8 @@ textarea {
   justify-content: center;
   padding: 16px 28px;
   color: #ffffff;
-  font-size: 15px;
-  font-weight: 800;
+  font-size: var(--gdc-text-body);
+  font-weight: var(--gdc-font-weight-semibold);
   text-align: center;
 
   &.success {

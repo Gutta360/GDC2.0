@@ -30,16 +30,16 @@
 
   h2 {
     margin: 0;
-    font-size: 17px;
-    font-weight: 800;
+    font-size: var(--gdc-text-h5);
+    font-weight: var(--gdc-font-weight-semibold);
   }
 
   button {
     border: 0;
     background: transparent;
     color: #ffffff;
-    font-size: 36px;
-    line-height: 1;
+    font-size: var(--gdc-text-h1);
+    line-height: var(--gdc-line-icon);
     cursor: pointer;
   }
 }
@@ -59,8 +59,8 @@
 .quadrant h3,
 .canal-section h3 {
   margin: 0 0 8px;
-  font-size: 14px;
-  font-weight: 800;
+  font-size: var(--gdc-text-small);
+  font-weight: var(--gdc-font-weight-semibold);
 }
 
 .teeth {
@@ -75,8 +75,8 @@
   border-radius: 6px;
   background: #ffffff;
   color: #111827;
-  font: inherit;
-  font-weight: 800;
+  font-family: var(--gdc-font-body);
+  font-weight: var(--gdc-font-weight-semibold);
   cursor: pointer;
 
   &.selected {
@@ -95,8 +95,8 @@ textarea {
   border-radius: 16px;
   background: #f8fafc;
   color: #111827;
-  font: inherit;
-  font-size: 15px;
+  font-family: var(--gdc-font-body);
+  font-size: var(--gdc-text-body);
 }
 
 select,
@@ -163,8 +163,8 @@ textarea {
 .validation-message {
   margin: 12px 0 0;
   color: #b42318;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: var(--gdc-text-caption);
+  font-weight: var(--gdc-font-weight-semibold);
 }
 
 .dialog-footer {
@@ -180,8 +180,8 @@ textarea {
   border-radius: 999px;
   background: #000000;
   color: #ffffff;
-  font: inherit;
-  font-weight: 800;
+  font-family: var(--gdc-font-body);
+  font-weight: var(--gdc-font-weight-semibold);
   cursor: pointer;
 }
 

@@ -18,8 +18,8 @@
   h1 {
     margin: 0;
     text-align: center;
-    font-size: 25px;
-    font-weight: 800;
+    font-size: var(--gdc-text-h3);
+    font-weight: var(--gdc-font-weight-semibold);
   }
 }
 
@@ -29,8 +29,8 @@
   background: transparent;
   color: inherit;
   cursor: pointer;
-  font-size: 38px;
-  line-height: 1;
+  font-size: var(--gdc-text-h1);
+  line-height: var(--gdc-line-icon);
 }
 
 .weekday-row,
@@ -43,8 +43,8 @@
 .weekday-row {
   margin-bottom: 10px;
   color: #6b7280;
-  font-size: 13px;
-  font-weight: 800;
+  font-size: var(--gdc-text-caption);
+  font-weight: var(--gdc-font-weight-semibold);
   text-align: center;
 }
 
@@ -77,8 +77,8 @@
 .day-number {
   display: block;
   text-align: center;
-  font-size: 18px;
-  font-weight: 800;
+  font-size: var(--gdc-text-h5);
+  font-weight: var(--gdc-font-weight-semibold);
 }
 
 .badges {
@@ -99,8 +99,8 @@
   padding: 0 8px;
   border-radius: 999px;
   color: #ffffff;
-  font-size: 12px;
-  font-weight: 800;
+  font-size: var(--gdc-text-caption);
+  font-weight: var(--gdc-font-weight-semibold);
 }
 
 .new,
@@ -137,7 +137,7 @@
 
 .message {
   margin: 0 0 16px;
-  font-weight: 700;
+  font-weight: var(--gdc-font-weight-semibold);
 }
 
 .notification-strip {
@@ -157,9 +157,9 @@
   border-radius: 0;
   box-shadow: 0 -10px 26px rgba(17, 24, 39, 0.24);
   color: #ffffff;
-  font-size: 15px;
-  font-weight: 800;
-  line-height: 1.35;
+  font-size: var(--gdc-text-body);
+  font-weight: var(--gdc-font-weight-semibold);
+  line-height: var(--gdc-line-compact);
   text-align: center;
   white-space: normal;
 
@@ -218,7 +218,7 @@
 
   h2 {
     margin: 0;
-    font-size: 22px;
+    font-size: var(--gdc-text-h4);
   }
 }
 
@@ -234,8 +234,8 @@
 .appointment-form h4 {
   margin: 0 0 18px;
   text-align: center;
-  font-size: 18px;
-  font-weight: 800;
+  font-size: var(--gdc-text-h5);
+  font-weight: var(--gdc-font-weight-semibold);
 }
 
 .day-section h3 {
@@ -244,7 +244,7 @@
 
 .muted {
   color: #737985;
-  font-weight: 600;
+  font-weight: var(--gdc-font-weight-semibold);
 }
 
 .day-list {
@@ -263,7 +263,7 @@
 
   p {
     margin: 0;
-    font-weight: 800;
+    font-weight: var(--gdc-font-weight-semibold);
   }
 
   small,
@@ -286,7 +286,7 @@ hr {
   background: transparent;
   color: #ffffff;
   cursor: pointer;
-  font-weight: 800;
+  font-weight: var(--gdc-font-weight-semibold);
 }
 
 .dialog-footer,
@@ -306,7 +306,7 @@ hr {
   border-radius: 999px;
   padding: 0 24px;
   cursor: pointer;
-  font-weight: 800;
+  font-weight: var(--gdc-font-weight-semibold);
 }
 
 .primary-button {
@@ -344,7 +344,7 @@ textarea {
   border-radius: 12px;
   background: #ffffff;
   color: #111827;
-  font: inherit;
+  font-family: var(--gdc-font-body);
 }
 
 textarea {
@@ -366,7 +366,7 @@ textarea {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-weight: 650;
+    font-weight: var(--gdc-font-weight-semibold);
   }
 }
 
@@ -400,7 +400,7 @@ input[type='checkbox'] {
 .busy-form label {
   display: grid;
   gap: 8px;
-  font-weight: 800;
+  font-weight: var(--gdc-font-weight-semibold);
 }
 
 .range-label {
@@ -416,8 +416,8 @@ input[type='checkbox'] {
 .section-label {
   display: block;
   margin-bottom: 10px;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: var(--gdc-text-small);
+  font-weight: var(--gdc-font-weight-semibold);
   color: #111827;
 }
 
@@ -437,8 +437,8 @@ input[type='checkbox'] {
   border-radius: 16px;
   background: #f8fafc;
   color: #111827;
-  font-family: inherit;
-  font-size: 15px;
+  font-family: var(--gdc-font-body);
+  font-size: var(--gdc-text-body);
   cursor: pointer;
   transition:
     border-color 0.2s ease,
@@ -469,7 +469,7 @@ input[type='checkbox'] {
 
 .dropdown-arrow {
   margin-left: 16px;
-  font-size: 15px;
+  font-size: var(--gdc-text-body);
   transition: transform 0.2s ease;
 
   &.open {
@@ -503,7 +503,7 @@ input[type='checkbox'] {
 
 .search-icon {
   opacity: 0.6;
-  font-size: 15px;
+  font-size: var(--gdc-text-body);
 }
 
 .search-box input {
@@ -514,8 +514,8 @@ input[type='checkbox'] {
   outline: none;
   background: transparent;
   color: #111827;
-  font-family: inherit;
-  font-size: 15px;
+  font-family: var(--gdc-font-body);
+  font-size: var(--gdc-text-body);
 }
 
 .search-box input::placeholder {
@@ -538,8 +538,8 @@ input[type='checkbox'] {
   border-radius: 10px;
   background: transparent;
   color: #111827;
-  font-family: inherit;
-  font-size: 14px;
+  font-family: var(--gdc-font-body);
+  font-size: var(--gdc-text-small);
   text-align: left;
   cursor: pointer;
 
@@ -551,17 +551,17 @@ input[type='checkbox'] {
 
 .option-id {
   min-width: 72px;
-  font-weight: 700;
+  font-weight: var(--gdc-font-weight-semibold);
 }
 
 .option-name {
-  font-weight: 500;
+  font-weight: var(--gdc-font-weight-medium);
 }
 
 .empty-search {
   padding: 20px 14px;
   color: #737985;
-  font-size: 14px;
+  font-size: var(--gdc-text-small);
 }
 
 @media (max-width: 900px) {

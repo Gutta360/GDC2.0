@@ -28,14 +28,14 @@
 
   h1 {
     margin: 0;
-    font-size: 34px;
-    font-weight: 800;
+    font-size: var(--gdc-text-h1);
+    font-weight: var(--gdc-font-weight-semibold);
   }
 
   p {
     margin: 5px 0 0;
-    font-size: 14px;
-    font-weight: 700;
+    font-size: var(--gdc-text-small);
+    font-weight: var(--gdc-font-weight-semibold);
     color: rgba(255, 255, 255, 0.72);
   }
 }
@@ -53,8 +53,8 @@
   gap: 8px;
 
   label {
-    font-size: 14px;
-    font-weight: 800;
+    font-size: var(--gdc-text-small);
+    font-weight: var(--gdc-font-weight-semibold);
     color: #111827;
   }
 
@@ -64,7 +64,7 @@
 
     padding: 12px 14px;
 
-    font-size: 15px;
+    font-size: var(--gdc-text-body);
     color: #101828;
 
     background: #ffffff;
@@ -88,7 +88,7 @@
 .error-message {
   padding: 10px 12px;
 
-  font-size: 14px;
+  font-size: var(--gdc-text-small);
   color: #b42318;
 
   background: #fef3f2;
@@ -114,8 +114,8 @@
   background: #111827;
   color: #ffffff;
 
-  font-size: 16px;
-  font-weight: 600;
+  font-size: var(--gdc-text-body-lg);
+  font-weight: var(--gdc-font-weight-semibold);
 
   cursor: pointer;
 
@@ -150,7 +150,7 @@
 
   .login-header {
     h1 {
-      font-size: 30px;
+      font-size: var(--gdc-text-h2);
     }
   }
 }

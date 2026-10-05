@@ -24,9 +24,9 @@
   h1 {
     margin: 0;
 
-    font-size: 27px;
-    font-weight: 800;
-    line-height: 1.2;
+    font-size: var(--gdc-text-h3);
+    font-weight: var(--gdc-font-weight-semibold);
+    line-height: var(--gdc-line-heading);
 
     color: #111827;
   }
@@ -46,8 +46,8 @@
 
   margin-bottom: 10px;
 
-  font-size: 14px;
-  font-weight: 700;
+  font-size: var(--gdc-text-small);
+  font-weight: var(--gdc-font-weight-semibold);
 
   color: #111827;
 }
@@ -77,8 +77,8 @@
   background: #f8fafc;
   color: #111827;
 
-  font-family: inherit;
-  font-size: 15px;
+  font-family: var(--gdc-font-body);
+  font-size: var(--gdc-text-body);
 
   cursor: pointer;
 
@@ -121,7 +121,7 @@
 .dropdown-arrow {
   margin-left: 16px;
 
-  font-size: 15px;
+  font-size: var(--gdc-text-body);
 
   transition: transform 0.2s ease;
 }
@@ -178,7 +178,7 @@
 .search-icon {
   opacity: 0.6;
 
-  font-size: 15px;
+  font-size: var(--gdc-text-body);
 }
 
 
@@ -194,8 +194,8 @@
   background: transparent;
   color: #111827;
 
-  font-family: inherit;
-  font-size: 15px;
+  font-family: var(--gdc-font-body);
+  font-size: var(--gdc-text-body);
 }
 
 
@@ -230,8 +230,8 @@
   background: transparent;
   color: #111827;
 
-  font-family: inherit;
-  font-size: 14px;
+  font-family: var(--gdc-font-body);
+  font-size: var(--gdc-text-small);
 
   text-align: left;
 
@@ -248,12 +248,12 @@
 .option-id {
   min-width: 72px;
 
-  font-weight: 700;
+  font-weight: var(--gdc-font-weight-semibold);
 }
 
 
 .option-name {
-  font-weight: 500;
+  font-weight: var(--gdc-font-weight-medium);
 }
 
 
@@ -262,7 +262,7 @@
 
   color: #667085;
 
-  font-size: 14px;
+  font-size: var(--gdc-text-small);
 }
 
 
@@ -278,8 +278,8 @@
 .patient-information h2 {
   margin: 0 0 8px;
 
-  font-size: 16px;
-  font-weight: 800;
+  font-size: var(--gdc-text-body-lg);
+  font-weight: var(--gdc-font-weight-semibold);
 
   color: #111827;
 }
@@ -304,8 +304,8 @@
 
 
 .detail-label {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: var(--gdc-text-small);
+  font-weight: var(--gdc-font-weight-semibold);
 
   color: #475467;
 }
@@ -314,8 +314,8 @@
 .detail-value {
   min-width: 0;
 
-  font-size: 15px;
-  font-weight: 500;
+  font-size: var(--gdc-text-body);
+  font-weight: var(--gdc-font-weight-medium);
 
   color: #111827;
 
@@ -324,7 +324,7 @@
 
 
 .patient-id {
-  font-weight: 700;
+  font-weight: var(--gdc-font-weight-semibold);
 }
 
 
@@ -352,8 +352,8 @@
 .empty-state-title {
   margin-bottom: 6px;
 
-  font-size: 15px;
-  font-weight: 700;
+  font-size: var(--gdc-text-body);
+  font-weight: var(--gdc-font-weight-semibold);
 
   color: #111827;
 }
@@ -361,7 +361,7 @@
 
 .empty-state-text,
 .loading-state {
-  font-size: 14px;
+  font-size: var(--gdc-text-small);
 
   color: #667085;
 }
@@ -405,9 +405,9 @@
   background: #111827;
   color: #ffffff;
 
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 700;
+  font-family: var(--gdc-font-body);
+  font-size: var(--gdc-text-small);
+  font-weight: var(--gdc-font-weight-semibold);
 
   cursor: pointer;
 
@@ -442,7 +442,7 @@
     margin-bottom: 28px;
 
     h1 {
-      font-size: 23px;
+      font-size: var(--gdc-text-h3);
     }
   }
 

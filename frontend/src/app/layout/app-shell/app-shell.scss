@@ -36,9 +36,10 @@
 .brand {
   flex-shrink: 0;
 
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  font-family: var(--gdc-font-heading);
+  font-size: var(--gdc-text-h4);
+  font-weight: var(--gdc-font-weight-semibold);
+  letter-spacing: var(--gdc-letter-spacing);
 }
 
 
@@ -69,8 +70,9 @@
   color: #ffffff;
   text-decoration: none;
 
-  font-size: 16px;
-  font-weight: 600;
+  font-family: var(--gdc-font-heading);
+  font-size: var(--gdc-text-body-lg);
+  font-weight: var(--gdc-font-weight-semibold);
 
   white-space: nowrap;
 
@@ -207,8 +209,9 @@
   color: #ffffff;
   text-decoration: none;
 
-  font-size: 16px;
-  font-weight: 600;
+  font-family: var(--gdc-font-heading);
+  font-size: var(--gdc-text-body-lg);
+  font-weight: var(--gdc-font-weight-semibold);
 
   white-space: nowrap;
 
@@ -252,7 +255,7 @@
   background: transparent;
   color: #ffffff;
 
-  font-size: 25px;
+  font-size: var(--gdc-text-h3);
 
   cursor: pointer;
 
@@ -301,7 +304,7 @@
     padding-left: 8px;
     padding-right: 8px;
 
-    font-size: 14px;
+    font-size: var(--gdc-text-small);
   }
 
   .dropdown-menu {
@@ -309,7 +312,7 @@
   }
 
   .dropdown-item {
-    font-size: 14px;
+    font-size: var(--gdc-text-small);
     padding: 18px 20px;
   }
 

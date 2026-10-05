@@ -15,8 +15,8 @@
   border-radius: 16px;
   background: #f8fafc;
   color: #111827;
-  font: inherit;
-  font-size: 15px;
+  font-family: var(--gdc-font-body);
+  font-size: var(--gdc-text-body);
   text-align: left;
   cursor: pointer;
 
@@ -55,7 +55,7 @@
   padding: 0 12px;
   border: 1px solid #d9dee7;
   border-radius: 12px;
-  font: inherit;
+  font-family: var(--gdc-font-body);
 }
 
 .patient-options {
@@ -73,7 +73,7 @@
   border-radius: 10px;
   background: transparent;
   color: #111827;
-  font: inherit;
+  font-family: var(--gdc-font-body);
   text-align: left;
   cursor: pointer;
 
@@ -88,5 +88,5 @@
   margin: 0;
   padding: 14px 12px;
   color: #667085;
-  font-size: 14px;
+  font-size: var(--gdc-text-small);
 }

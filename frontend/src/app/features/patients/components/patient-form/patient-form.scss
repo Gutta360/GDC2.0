@@ -48,9 +48,9 @@
 .form-field > label {
   margin: 0;
 
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.4;
+  font-size: var(--gdc-text-small);
+  font-weight: var(--gdc-font-weight-semibold);
+  line-height: var(--gdc-line-body);
 
   color: #111827;
 }
@@ -79,9 +79,9 @@
   background: #f8fafc;
   color: #111827;
 
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 400;
+  font-family: var(--gdc-font-body);
+  font-size: var(--gdc-text-body);
+  font-weight: var(--gdc-font-weight-regular);
 
   transition:
     border-color 0.2s ease,
@@ -195,8 +195,8 @@ input[type='number']::-webkit-outer-spin-button {
 
   cursor: pointer;
 
-  font-size: 14px !important;
-  font-weight: 500 !important;
+  font-size: var(--gdc-text-small) !important;
+  font-weight: var(--gdc-font-weight-medium) !important;
 
   color: #111827 !important;
 }
@@ -231,9 +231,9 @@ input[type='number']::-webkit-outer-spin-button {
 .validation-message {
   margin-top: 2px;
 
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.4;
+  font-size: var(--gdc-text-caption);
+  font-weight: var(--gdc-font-weight-medium);
+  line-height: var(--gdc-line-body);
 
   color: #b42318;
 }
@@ -302,12 +302,12 @@ input[type='number']::-webkit-outer-spin-button {
   background: #111827;
   color: #ffffff;
 
-  font-family: inherit;
+  font-family: var(--gdc-font-body);
 
-  font-size: 14px;
-  font-weight: 700;
+  font-size: var(--gdc-text-small);
+  font-weight: var(--gdc-font-weight-semibold);
 
-  letter-spacing: 0.1px;
+  letter-spacing: var(--gdc-letter-spacing);
 
   cursor: pointer;
 

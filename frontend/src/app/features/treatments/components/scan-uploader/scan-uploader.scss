@@ -34,15 +34,15 @@
   span {
     overflow: hidden;
     color: #344054;
-    font-size: 12px;
-    font-weight: 800;
+    font-size: var(--gdc-text-caption);
+    font-weight: var(--gdc-font-weight-semibold);
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   small {
     color: #667085;
-    font-size: 11px;
+    font-size: var(--gdc-text-caption);
   }
 
   button {
@@ -50,9 +50,9 @@
     border-top: 1px solid #eef0f4;
     background: transparent;
     color: #b42318;
-    font: inherit;
-    font-size: 12px;
-    font-weight: 800;
+    font-family: var(--gdc-font-body);
+    font-size: var(--gdc-text-caption);
+    font-weight: var(--gdc-font-weight-semibold);
     cursor: pointer;
     padding: 8px;
   }
@@ -73,7 +73,7 @@
   border-radius: 999px;
   background: #111827;
   color: #ffffff;
-  font-weight: 800;
+  font-weight: var(--gdc-font-weight-semibold);
   cursor: pointer;
 
   svg {
@@ -94,6 +94,6 @@
 .validation-message {
   margin: 10px 0 0;
   color: #b42318;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: var(--gdc-text-caption);
+  font-weight: var(--gdc-font-weight-semibold);
 }

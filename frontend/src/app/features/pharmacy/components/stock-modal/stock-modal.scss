@@ -25,8 +25,8 @@ header {
 
   h2 {
     margin: 0;
-    font-size: 22px;
-    font-weight: 800;
+    font-size: var(--gdc-text-h4);
+    font-weight: var(--gdc-font-weight-semibold);
   }
 }
 
@@ -36,8 +36,8 @@ header {
   border: 0;
   background: transparent;
   color: #111827;
-  font-size: 30px;
-  line-height: 1;
+  font-size: var(--gdc-text-h2);
+  line-height: var(--gdc-line-icon);
   cursor: pointer;
 }
 
@@ -54,8 +54,8 @@ input {
   border-radius: 16px;
   background: #f8fafc;
   color: #111827;
-  font: inherit;
-  font-size: 15px;
+  font-family: var(--gdc-font-body);
+  font-size: var(--gdc-text-body);
   padding: 0 16px;
 }
 
@@ -72,8 +72,8 @@ footer {
   min-height: 43px;
   border-radius: 999px;
   padding: 0 26px;
-  font: inherit;
-  font-weight: 800;
+  font-family: var(--gdc-font-body);
+  font-weight: var(--gdc-font-weight-semibold);
   cursor: pointer;
 }
 
@@ -98,8 +98,8 @@ footer {
 .validation-message,
 .confirm-message {
   margin: 0;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: var(--gdc-text-caption);
+  font-weight: var(--gdc-font-weight-semibold);
 }
 
 .validation-message {

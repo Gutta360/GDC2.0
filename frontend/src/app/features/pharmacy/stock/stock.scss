@@ -10,8 +10,8 @@
 
   h1 {
     margin: 0 0 54px;
-    font-size: 27px;
-    font-weight: 800;
+    font-size: var(--gdc-text-h3);
+    font-weight: var(--gdc-font-weight-semibold);
   }
 }
 
@@ -34,7 +34,7 @@
   padding: 0 16px;
 
   span {
-    font-size: 25px;
+    font-size: var(--gdc-text-h3);
     color: #111827;
   }
 
@@ -43,8 +43,8 @@
     border: 0;
     background: transparent;
     color: #111827;
-    font: inherit;
-    font-size: 15px;
+    font-family: var(--gdc-font-body);
+    font-size: var(--gdc-text-body);
 
     &:focus {
       outline: none;
@@ -59,8 +59,8 @@
   border-radius: 999px;
   background: #111827;
   color: #ffffff;
-  font: inherit;
-  font-weight: 800;
+  font-family: var(--gdc-font-body);
+  font-weight: var(--gdc-font-weight-semibold);
   padding: 0 28px;
   cursor: pointer;
 }
@@ -93,7 +93,7 @@
   border-bottom: 1px solid #e5e7eb;
   background: transparent;
   color: #111827;
-  font: inherit;
+  font-family: var(--gdc-font-body);
   text-align: left;
   cursor: pointer;
 
@@ -121,8 +121,8 @@
   justify-content: center;
   padding: 16px 28px;
   color: #ffffff;
-  font-size: 15px;
-  font-weight: 800;
+  font-size: var(--gdc-text-body);
+  font-weight: var(--gdc-font-weight-semibold);
   text-align: center;
 
   &.success {

@@ -10,8 +10,8 @@
 
   h1 {
     margin: 0 0 54px;
-    font-size: 27px;
-    font-weight: 800;
+    font-size: var(--gdc-text-h3);
+    font-weight: var(--gdc-font-weight-semibold);
   }
 }
 
@@ -26,8 +26,8 @@
   label {
     display: block;
     margin: 0 0 12px;
-    font-size: 17px;
-    font-weight: 800;
+    font-size: var(--gdc-text-h5);
+    font-weight: var(--gdc-font-weight-semibold);
   }
 }
 
@@ -39,8 +39,8 @@
 
   h2 {
     margin: 0;
-    font-size: 17px;
-    font-weight: 800;
+    font-size: var(--gdc-text-h5);
+    font-weight: var(--gdc-font-weight-semibold);
   }
 
   label {
@@ -48,7 +48,7 @@
     align-items: center;
     gap: 10px;
     margin: 0;
-    font-weight: 800;
+    font-weight: var(--gdc-font-weight-semibold);
   }
 }
 
@@ -60,8 +60,8 @@ textarea {
   border-radius: 16px;
   background: #f8fafc;
   color: #111827;
-  font: inherit;
-  font-size: 15px;
+  font-family: var(--gdc-font-body);
+  font-size: var(--gdc-text-body);
 }
 
 input {
@@ -118,7 +118,7 @@ textarea {
   border-bottom: 1px solid #e5e7eb;
   background: transparent;
   color: #111827;
-  font: inherit;
+  font-family: var(--gdc-font-body);
   text-align: left;
   cursor: pointer;
 
@@ -141,8 +141,8 @@ textarea {
 .validation-message {
   margin: 8px 0 0;
   color: #b42318;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: var(--gdc-text-caption);
+  font-weight: var(--gdc-font-weight-semibold);
 }
 
 .form-footer {
@@ -158,8 +158,8 @@ textarea {
 .reset-button {
   min-height: 43px;
   border-radius: 999px;
-  font: inherit;
-  font-weight: 800;
+  font-family: var(--gdc-font-body);
+  font-weight: var(--gdc-font-weight-semibold);
   padding: 0 28px;
   cursor: pointer;
 
@@ -193,8 +193,8 @@ textarea {
   justify-content: center;
   padding: 16px 28px;
   color: #ffffff;
-  font-size: 15px;
-  font-weight: 800;
+  font-size: var(--gdc-text-body);
+  font-weight: var(--gdc-font-weight-semibold);
   text-align: center;
 
   &.success {

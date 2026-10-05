@@ -19,9 +19,9 @@
   h1 {
     margin: 0;
 
-    font-size: 27px;
-    font-weight: 800;
-    line-height: 1.2;
+    font-size: var(--gdc-text-h3);
+    font-weight: var(--gdc-font-weight-semibold);
+    line-height: var(--gdc-line-heading);
 
     color: #111827;
   }
@@ -44,9 +44,9 @@
   border-radius: 0;
   box-shadow: 0 -10px 26px rgba(17, 24, 39, 0.24);
   color: #ffffff;
-  font-size: 15px;
-  font-weight: 800;
-  line-height: 1.35;
+  font-size: var(--gdc-text-body);
+  font-weight: var(--gdc-font-weight-semibold);
+  line-height: var(--gdc-line-compact);
   text-align: center;
   white-space: normal;
 
@@ -94,7 +94,7 @@
     margin-bottom: 24px;
 
     h1 {
-      font-size: 23px;
+      font-size: var(--gdc-text-h3);
     }
   }
 
