@@ -83,7 +83,10 @@
 
 .badges {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   gap: 6px;
   margin-top: 16px;
 }

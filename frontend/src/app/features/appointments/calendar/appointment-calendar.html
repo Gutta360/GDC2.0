@@ -297,8 +297,8 @@
 
             <h4>Section 1 - Vitals</h4>
             <div class="form-grid">
-              <input type="number" formControlName="systolicBp" placeholder="Systolic" />
-              <input type="number" formControlName="diastolicBp" placeholder="Diastolic" />
+              <input type="text" inputmode="numeric" gdcIntegerInput formControlName="systolicBp" placeholder="Systolic" />
+              <input type="text" inputmode="numeric" gdcIntegerInput formControlName="diastolicBp" placeholder="Diastolic" />
               <label class="range-label">
                 Heart Rate - {{ appointmentForm.value.heartRate || 72 }}
                 <input type="range" min="30" max="220" formControlName="heartRate" />
@@ -307,10 +307,10 @@
                 Breathing Rate - {{ appointmentForm.value.breathingRate || 16 }}
                 <input type="range" min="5" max="80" formControlName="breathingRate" />
               </label>
-              <input type="number" formControlName="heightCm" placeholder="Height (cm)" />
-              <input type="number" formControlName="weightKg" placeholder="Weight (kg)" />
-              <input type="number" formControlName="fbs" placeholder="FBS" />
-              <input type="number" formControlName="rbs" placeholder="RBS" />
+              <input type="text" inputmode="decimal" gdcDecimalInput formControlName="heightCm" placeholder="Height (cm)" />
+              <input type="text" inputmode="decimal" gdcDecimalInput formControlName="weightKg" placeholder="Weight (kg)" />
+              <input type="text" inputmode="decimal" gdcDecimalInput formControlName="fbs" placeholder="FBS" />
+              <input type="text" inputmode="decimal" gdcDecimalInput formControlName="rbs" placeholder="RBS" />
             </div>
 
             <h4>Section 2 - Health Conditions</h4>

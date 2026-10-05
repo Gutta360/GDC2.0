@@ -15,13 +15,17 @@ import {
   ValidationErrors,
   Validators
 } from '@angular/forms';
+import { DecimalInputDirective } from '../../../../shared/directives/decimal-input.directive';
+import { IntegerInputDirective } from '../../../../shared/directives/integer-input.directive';
 
 @Component({
   selector: 'app-patient-form',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DecimalInputDirective,
+    IntegerInputDirective
   ],
   templateUrl: './patient-form.html',
   styleUrl: './patient-form.scss'

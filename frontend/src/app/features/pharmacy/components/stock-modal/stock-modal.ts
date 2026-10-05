@@ -17,6 +17,7 @@ import {
   Medicine,
   MedicineStockRequest
 } from '../../models/pharmacy.model';
+import { IntegerInputDirective } from '../../../../shared/directives/integer-input.directive';
 
 export function clinicToday(): string {
   const today = new Date();
@@ -39,7 +40,8 @@ export function isPastExpiryDate(
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    IntegerInputDirective
   ],
   templateUrl: './stock-modal.html',
   styleUrl: './stock-modal.scss'

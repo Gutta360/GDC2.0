@@ -19,6 +19,7 @@ import {
   PharmacyPaymentCreateRequest
 } from '../models/pharmacy.model';
 import { PharmacyService } from '../services/pharmacy.service';
+import { DecimalInputDirective } from '../../../shared/directives/decimal-input.directive';
 
 export const PHARMACY_MONEY_PATTERN = /^\d{1,8}(\.\d{1,2})?$/;
 
@@ -28,7 +29,8 @@ export const PHARMACY_MONEY_PATTERN = /^\d{1,8}(\.\d{1,2})?$/;
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TreatmentPatientSelector
+    TreatmentPatientSelector,
+    DecimalInputDirective
   ],
   templateUrl: './payment.html',
   styleUrl: './payment.scss'

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   OnInit,
@@ -30,7 +31,8 @@ export class TreatmentPatientSelector implements OnInit {
   loading = false;
 
   constructor(
-    private patientService: PatientService
+    private patientService: PatientService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -50,10 +52,12 @@ export class TreatmentPatientSelector implements OnInit {
               mobile: patient.mobile
             }));
           this.loading = false;
+          this.cdr.detectChanges();
         },
         error: () => {
           this.patients = [];
           this.loading = false;
+          this.cdr.detectChanges();
         }
       });
   }
@@ -64,9 +68,7 @@ export class TreatmentPatientSelector implements OnInit {
     );
 
     if (!selected) {
-      return this.loading
-        ? 'Loading patients...'
-        : 'Select patient';
+      return 'Select patient';
     }
 
     return this.labelFor(selected);

@@ -19,6 +19,7 @@ import {
   PaymentMode
 } from '../models/payment.model';
 import { PaymentService } from '../services/payment.service';
+import { DecimalInputDirective } from '../../../shared/directives/decimal-input.directive';
 
 export function canSubmitPayment(
   formInvalid: boolean,
@@ -28,13 +29,16 @@ export function canSubmitPayment(
   return !formInvalid && !saving && hasSelectedTreatment;
 }
 
+export const PAYMENT_AMOUNT_PATTERN = /^\d{1,8}(\.\d{1,2})?$/;
+
 @Component({
   selector: 'app-payment',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TreatmentPatientSelector
+    TreatmentPatientSelector,
+    DecimalInputDirective
   ],
   templateUrl: './payment.html',
   styleUrl: './payment.scss'
@@ -49,7 +53,11 @@ export class Payment implements OnDestroy {
   form = this.fb.group({
     patientId: ['', Validators.required],
     treatmentId: ['', Validators.required],
-    paymentAmount: [0, [Validators.required, Validators.min(0)]],
+    paymentAmount: ['0', [
+      Validators.required,
+      Validators.min(0),
+      Validators.pattern(PAYMENT_AMOUNT_PATTERN)
+    ]],
     paymentMode: ['CASH' as PaymentMode, Validators.required],
     details: ['', Validators.maxLength(1000)]
   });
@@ -90,7 +98,7 @@ export class Payment implements OnDestroy {
     this.form.patchValue({
       patientId: patientId ?? '',
       treatmentId: '',
-      paymentAmount: 0
+      paymentAmount: '0'
     });
     this.outstandingTreatments = [];
 
@@ -122,7 +130,7 @@ export class Payment implements OnDestroy {
   selectTreatment(treatment: OutstandingTreatmentPayment): void {
     this.form.patchValue({
       treatmentId: treatment.treatmentId,
-      paymentAmount: treatment.outstandingAmount
+      paymentAmount: treatment.outstandingAmount.toFixed(2)
     });
   }
 
@@ -155,7 +163,7 @@ export class Payment implements OnDestroy {
           const patientId = request.patientId;
           this.form.patchValue({
             treatmentId: '',
-            paymentAmount: 0,
+            paymentAmount: '0',
             details: ''
           });
           this.reloadOutstanding(patientId);
@@ -170,7 +178,7 @@ export class Payment implements OnDestroy {
     this.form.reset({
       patientId: '',
       treatmentId: '',
-      paymentAmount: 0,
+      paymentAmount: '0',
       paymentMode: 'CASH',
       details: ''
     });

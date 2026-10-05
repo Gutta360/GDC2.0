@@ -35,7 +35,9 @@
               </span>
               <span>{{ item.prescribedQuantity }}</span>
               <input
-                type="number"
+                type="text"
+                inputmode="decimal"
+                gdcDecimalInput
                 min="0"
                 step="0.01"
                 [value]="prices[item.prescriptionItemId]"

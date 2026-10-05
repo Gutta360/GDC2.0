@@ -74,8 +74,8 @@
             </div>
 
             <div class="field-grid">
-              <input type="number" min="0" step="0.01" placeholder="Implant Width (mm)" [(ngModel)]="implantWidthMm" />
-              <input type="number" min="0" step="0.01" placeholder="Implant Length (mm)" [(ngModel)]="implantLengthMm" />
+              <input type="text" inputmode="decimal" gdcDecimalInput min="0" step="0.01" placeholder="Implant Width (mm)" [(ngModel)]="implantWidthMm" />
+              <input type="text" inputmode="decimal" gdcDecimalInput min="0" step="0.01" placeholder="Implant Length (mm)" [(ngModel)]="implantLengthMm" />
               <input type="text" placeholder="Implant Company" [(ngModel)]="implantCompany" />
               <input type="date" aria-label="Healing Cap Placement" [(ngModel)]="healingCapPlacementDate" />
               <input type="date" aria-label="Abutment Placement" [(ngModel)]="abutmentPlacementDate" />
@@ -92,7 +92,9 @@
                 <div class="field-grid">
                   @for (canal of canalsForTooth(tooth); track canal) {
                     <input
-                      type="number"
+                      type="text"
+                      inputmode="decimal"
+                      gdcDecimalInput
                       min="0"
                       step="0.01"
                       [placeholder]="canal + ' (mm)'"

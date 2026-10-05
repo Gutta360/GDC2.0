@@ -4,10 +4,25 @@ import {
   Component,
   OnDestroy
 } from '@angular/core';
-import { finalize } from 'rxjs';
+import {
+  finalize,
+  forkJoin
+} from 'rxjs';
+import { PharmacyPaymentResponse } from '../../pharmacy/models/pharmacy.model';
+import { PharmacyService } from '../../pharmacy/services/pharmacy.service';
 import { TreatmentPatientSelector } from '../../treatments/components/patient-selector/patient-selector';
 import { PaymentResponse } from '../models/payment.model';
 import { PaymentService } from '../services/payment.service';
+
+interface PaymentHistoryItem {
+  paymentId: string;
+  paidAt: string;
+  amount: number;
+  details: string | null;
+  paymentFor: string;
+  referenceId: string;
+  paymentMode: string;
+}
 
 export function paymentHistoryEmptyMessage(
   loading: boolean,
@@ -34,7 +49,7 @@ export function paymentHistoryEmptyMessage(
 })
 export class PaymentHistory implements OnDestroy {
 
-  payments: PaymentResponse[] = [];
+  payments: PaymentHistoryItem[] = [];
   loading = false;
   selectedPatientId = '';
   snackbarMessage = '';
@@ -44,6 +59,7 @@ export class PaymentHistory implements OnDestroy {
 
   constructor(
     private paymentService: PaymentService,
+    private pharmacyService: PharmacyService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -67,15 +83,22 @@ export class PaymentHistory implements OnDestroy {
 
     this.loading = true;
 
-    this.paymentService
-      .getPayments(patientId)
+    forkJoin({
+      treatmentPayments: this.paymentService.getPayments(patientId),
+      pharmacyPayments: this.pharmacyService.getPayments(patientId)
+    })
       .pipe(finalize(() => {
         this.loading = false;
         this.cdr.detectChanges();
       }))
       .subscribe({
-        next: payments => {
-          this.payments = payments;
+        next: ({ treatmentPayments, pharmacyPayments }) => {
+          this.payments = [
+            ...treatmentPayments.map(payment => this.toTreatmentPaymentItem(payment)),
+            ...pharmacyPayments.map(payment => this.toPharmacyPaymentItem(payment))
+          ].sort((first, second) =>
+            new Date(second.paidAt).getTime() - new Date(first.paidAt).getTime()
+          );
         },
         error: error => {
           this.showSnackbar(error?.error?.message ?? 'Could not load payment history.', 'error');
@@ -99,5 +122,29 @@ export class PaymentHistory implements OnDestroy {
       this.snackbarTimeout = null;
       this.cdr.detectChanges();
     }, 5000);
+  }
+
+  private toTreatmentPaymentItem(payment: PaymentResponse): PaymentHistoryItem {
+    return {
+      paymentId: payment.paymentId,
+      paidAt: payment.paidAt,
+      amount: payment.amount,
+      details: payment.details,
+      paymentFor: payment.paymentFor,
+      referenceId: payment.treatmentId,
+      paymentMode: payment.paymentMode
+    };
+  }
+
+  private toPharmacyPaymentItem(payment: PharmacyPaymentResponse): PaymentHistoryItem {
+    return {
+      paymentId: payment.paymentId,
+      paidAt: payment.paidAt,
+      amount: payment.totalAmount,
+      details: payment.details,
+      paymentFor: 'Pharmacy',
+      referenceId: '',
+      paymentMode: payment.paymentMode
+    };
   }
 }

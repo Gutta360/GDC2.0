@@ -7,6 +7,7 @@ import {
   Output
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { DecimalInputDirective } from '../../../../shared/directives/decimal-input.directive';
 import {
   ClinicalProblem,
   ImplantType,
@@ -28,7 +29,8 @@ interface RootCanalDraft {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    DecimalInputDirective
   ],
   templateUrl: './add-problem.html',
   styleUrl: './add-problem.scss'
@@ -86,6 +88,8 @@ export class AddProblem implements OnChanges {
   ngOnChanges(): void {
     if (this.open && this.initialProblem) {
       this.populate(this.initialProblem);
+    } else if (this.open && !this.initialProblem) {
+      this.reset();
     }
   }
 

@@ -18,6 +18,7 @@ import { PatientHealthSnapshotPanel } from '../components/health-snapshot/health
 import { ScanUploader } from '../components/scan-uploader/scan-uploader';
 import { TreatmentPatientSelector } from '../components/patient-selector/patient-selector';
 import { TreatmentProblemList } from '../components/problem-list/problem-list';
+import { DecimalInputDirective } from '../../../shared/directives/decimal-input.directive';
 import {
   ClinicalProblem,
   PatientHealthSnapshot,
@@ -39,7 +40,8 @@ export const TREATMENT_AMOUNT_PATTERN = /^\d{1,8}(\.\d{1,2})?$/;
     TreatmentProblemList,
     MedicineSelector,
     ScanUploader,
-    PatientHealthSnapshotPanel
+    PatientHealthSnapshotPanel,
+    DecimalInputDirective
   ],
   templateUrl: './treatment.html',
   styleUrl: './treatment.scss'
@@ -132,6 +134,8 @@ export class Treatment implements OnDestroy {
 
     this.editingProblem = null;
     this.editingProblemIndex = null;
+    this.addProblemOpen = false;
+    this.cdr.detectChanges();
   }
 
   removeProblem(index: number): void {

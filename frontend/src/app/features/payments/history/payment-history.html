@@ -31,7 +31,7 @@
             </div>
             <div>
               <span>Payment For</span>
-              <strong>{{ payment.paymentFor }} {{ payment.treatmentId }}</strong>
+              <strong>{{ payment.referenceId ? payment.paymentFor + ' ' + payment.referenceId : payment.paymentFor }}</strong>
             </div>
             <div>
               <span>Payment Mode</span>

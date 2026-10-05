@@ -23,6 +23,8 @@ import {
 import { AppointmentService } from '../services/appointment.service';
 import { PatientSummary } from '../../patients/models/patient.model';
 import { PatientService } from '../../patients/services/patient.service';
+import { DecimalInputDirective } from '../../../shared/directives/decimal-input.directive';
+import { IntegerInputDirective } from '../../../shared/directives/integer-input.directive';
 
 interface CalendarCell {
   date: Date;
@@ -39,7 +41,9 @@ interface CalendarCell {
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DecimalInputDirective,
+    IntegerInputDirective
   ],
   templateUrl: './appointment-calendar.html',
   styleUrl: './appointment-calendar.scss'

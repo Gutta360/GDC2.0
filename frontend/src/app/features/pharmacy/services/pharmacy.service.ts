@@ -57,4 +57,11 @@ export class PharmacyService {
       request
     );
   }
+
+  getPayments(patientId: string): Observable<PharmacyPaymentResponse[]> {
+    return this.http.get<PharmacyPaymentResponse[]>(
+      `${this.pharmacyApiUrl}/payments`,
+      { params: { patientId } }
+    );
+  }
 }

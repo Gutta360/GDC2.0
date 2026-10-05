@@ -150,6 +150,8 @@ export class FollowUp implements OnDestroy {
 
     this.editingProblem = null;
     this.editingProblemIndex = null;
+    this.addProblemOpen = false;
+    this.cdr.detectChanges();
   }
 
   scanImageUrl(scan: ScanResponse): string {
