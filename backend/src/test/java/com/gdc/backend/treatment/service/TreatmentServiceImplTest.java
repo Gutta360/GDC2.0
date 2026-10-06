@@ -10,6 +10,7 @@ import com.gdc.backend.treatment.dto.ProblemRequest;
 import com.gdc.backend.treatment.dto.FollowUpCreateRequest;
 import com.gdc.backend.treatment.dto.TreatmentCreateRequest;
 import com.gdc.backend.treatment.dto.TreatmentResponse;
+import com.gdc.backend.treatment.entity.ImpactionType;
 import com.gdc.backend.treatment.entity.ProblemType;
 import com.gdc.backend.treatment.entity.TreatmentType;
 import com.gdc.backend.treatment.exception.TreatmentValidationException;
@@ -223,6 +224,28 @@ class TreatmentServiceImplTest {
     }
 
     @Test
+    void createFollowUpPersistsNewProblems() {
+
+        var response = service.createFollowUp(
+                baseFollowUpRequest(List.of(new ProblemRequest(
+                        ProblemType.IMPACTION,
+                        List.of(38),
+                        "severe",
+                        ImpactionType.HORIZONTAL,
+                        null,
+                        List.of()
+                ))),
+                List.of()
+        );
+
+        assertThat(response.followUpId()).isEqualTo("F-00001");
+        assertThat(response.newProblems()).hasSize(1);
+        assertThat(response.newProblems().getFirst().problemType()).isEqualTo(ProblemType.IMPACTION);
+        assertThat(response.newProblems().getFirst().teeth()).containsExactly(38);
+        assertThat(response.newProblems().getFirst().notes()).isEqualTo("severe");
+    }
+
+    @Test
     void successfulTreatmentSaveRetainsScanFiles() throws IOException {
 
         service.createTreatment(
@@ -316,13 +339,17 @@ class TreatmentServiceImplTest {
     }
 
     private FollowUpCreateRequest baseFollowUpRequest() {
+        return baseFollowUpRequest(List.of());
+    }
+
+    private FollowUpCreateRequest baseFollowUpRequest(List<ProblemRequest> newProblems) {
 
         return new FollowUpCreateRequest(
                 "P-00001",
                 null,
                 Instant.parse("2026-10-02T00:00:00Z"),
                 "Notes",
-                List.of(),
+                newProblems,
                 List.of()
         );
     }

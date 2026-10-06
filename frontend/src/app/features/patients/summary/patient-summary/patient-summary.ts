@@ -177,8 +177,8 @@ export class PatientSummary implements OnDestroy {
     return value.charAt(0) + value.slice(1).toLowerCase();
   }
 
-  problemsText(problems: ClinicalProblem[]): string {
-    if (!problems.length) {
+  problemsText(problems: ClinicalProblem[] | null | undefined): string {
+    if (!problems?.length) {
       return 'No problems found';
     }
 
