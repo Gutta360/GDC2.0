@@ -382,12 +382,13 @@
 @media (max-width: 700px) {
 
   .main-header {
-    overflow-x: auto;
+    overflow: visible;
   }
 
   .main-navigation {
+    flex-wrap: wrap;
     justify-content: flex-start;
-    min-width: max-content;
+    min-width: 0;
   }
 
   .application-content {

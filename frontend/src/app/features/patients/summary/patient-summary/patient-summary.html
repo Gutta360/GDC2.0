@@ -95,6 +95,12 @@
               <strong>Medicines</strong>
               <span>{{ medicinesText(followUp.prescribedMedicines) }}</span>
             </div>
+            @if (followUp.newProblems.length) {
+              <div class="summary-row">
+                <strong>New Problems</strong>
+                <span>{{ problemsText(followUp.newProblems) }}</span>
+              </div>
+            }
             <div class="summary-row">
               <strong>Scans</strong>
               @if (followUp.scans.length) {
